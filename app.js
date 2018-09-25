@@ -24,8 +24,8 @@ var flash = require("connect-flash");
 var session = require("express-session");
 
 var configDB = require('./config/database.js');
-//mongoose.connect(configDB.url);
-//mongoose.Promise = require('q').Promise;
+mongoose.connect(configDB.url);
+mongoose.Promise = require('q').Promise;
 
 require('./config/passport.js')(passport); // pass passport for configuration
 
