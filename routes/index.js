@@ -3,7 +3,7 @@ var router = express.Router();
 
 module.exports = function(app, passport){
   /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', isLoggedIn, function(req, res, next) {
   res.render('index', { title: 'Rest Race', user: req.user });
 });
 
@@ -75,8 +75,8 @@ function isLoggedIn(req, res, next) {
   if (req.isAuthenticated())
       return next();
 
-  // if they aren't redirect them to the home page
-  res.redirect('/');
+  // if they aren't redirect them to the login page
+  res.redirect('/login');
 }
 
 function isNotLoggedIn(req, res, next){

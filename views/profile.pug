@@ -1,0 +1,43 @@
+extends layout
+
+block content
+    .container
+      .page-header.text-center
+        h1
+          span.fa.fa-anchor
+          |  Profile Page
+        a.btn.btn-default.btn-sm(href='/logout') Logout
+      .row
+        // LOCAL INFORMATION
+        .col-sm-6
+          .well
+            h3.text.primary
+              span.fa.fa-user
+              |  Local
+            p
+              strong id
+              | : #{user._id}
+              br
+              strong email
+              | : #{user.local.email}
+              br
+              strong password
+              | : #{user.local.password}
+
+        .col-sm-6
+            .well
+                h3.text-primary
+                    span.fa.fa-facebook
+                    |  Facebook
+                p
+                    strong id
+                    | : #{user.facebook.id}
+                    br
+                    strong token
+                    | : #{user.facebook.token}
+                    br
+                    strong email
+                    | : #{user.facebook.email}
+                    br
+                    strong name
+                    | : #{user.facebook.name}
