@@ -7,12 +7,18 @@ var races = require('../../middleware/races');
 var mongoose = require('mongoose');
 Race = mongoose.model('Race');
 
-router.param('user_id', (req, res, next, user_id) => {
-	// sample user, would actually fetch from DB, etc...
-	console.log('params:'+user_id);
-	req.user_id = user_id;
+// router.param('user_id', (req, res, next, user_id) => {
+// 	// sample user, would actually fetch from DB, etc...
+// 	console.log('params:'+user_id);
+// 	req.user_id = user_id;
+// 	next();
+// });
+
+function get_user_id(req, res, next) {
+	console.log('params:'+ req.query.user_id);
+	req.user_id = req.query.user_id;
 	next();
-});
+}
 
 // Routing
 
@@ -35,7 +41,7 @@ router.param('user_id', (req, res, next, user_id) => {
  */
 
 router.route('/')
-	.get(races.getRaces, function(req, res, next) {
+	.get(get_user_id, races.getRaces, function(req, res, next) {
 		return res.json(req.data);
 	})
 	.post(races.addRace, function(req, res, next) {

@@ -3,7 +3,7 @@ Race = mongoose.model('Race');
 
 module.exports = {
     getRaces(req, res, next){
-        var result = Race.find({ Owners: req.query.user_id });
+        var result = Race.find({ Owners: req.user_id });
 
         result
             .then(data => {
