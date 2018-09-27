@@ -5,8 +5,8 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 // load the auth variables
 var configAuth = require('./auth');
 
-// load up the user model
-var User            = require('../models/user');
+var mongoose = require('mongoose');
+User = mongoose.model('User');
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {

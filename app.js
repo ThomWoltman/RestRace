@@ -8,13 +8,18 @@ var bodyParser = require('body-parser');
 //swagger docs
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-var options = { swaggerDefinition: { /* swaggerDefinition */ },    apis: ['./models/*.js', './routes/*.js', './app.js'] };
+var options = { swaggerDefinition: { /* swaggerDefinition */ },    apis: ['./models/*.js', './routes/api/*.js', './app.js'] };
 var swaggerSpec = swaggerJSDoc(options);
 // /swagger docs
 
 // Data Access Layer
 var mongoose = require('mongoose');
 // /Data Access Layer
+
+// Models
+require('./models/race');
+require('./models/user');
+// /Models
 
 // authentication
 var passport = require("passport");
@@ -28,13 +33,6 @@ mongoose.connect(configDB.url);
 mongoose.Promise = require('q').Promise;
 
 require('./config/passport.js')(passport); // pass passport for configuration
-
-// Models
-// require('./models/book');
-// require('./models/author');
-// require('./models/fillTestData')();
-// /Models
-
 
 
 function handleError(req, res, statusCode, message){
@@ -69,6 +67,9 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 app.use('/', require('./routes/index')(app, passport, handleError));
+app.use('/cms/races', require('./routes/cms/races')(handleError));
+app.use('/api/races', require('./routes/api/races')(handleError));
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // catch 404 and forward to error handler

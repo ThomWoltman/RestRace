@@ -5,7 +5,7 @@ block content
   .container
       .col-sm-6.col-sm-offset-3
         h1
-          span.fa.fa-sign-in
+          span.fas.fa-sign-in-alt
           |  Login
         // show any messages that come back with authentication
         if message.length > 0
@@ -22,16 +22,12 @@ block content
           button.btn.btn-warning.btn-lg.btn-block(type='submit') Login
           p Login or Register with:
           a.btn.btn-primary.btn-lg.btn-block(href='/auth/facebook', class='facebook')
-            span.fa.fa-facebook
+            span.fab.fa-facebook-f
             |  Facebook
           a.btn.btn-primary.btn-lg.btn-block(href='/', class='twitter')
-            span.fa.fa-twitter
+            span.fab.fa-twitter
             |  Twitter  
         hr
         p
           | Need an account? 
           a(href='/signup') Signup
-        p
-          | Or go 
-          a(href='/') home
-          | .
