@@ -4,13 +4,16 @@ var login = require('../../middleware/login');
 var races = require('../../middleware/races');
 var handleError;
 
-router.get('/', login.isLoggedIn, function(req, res, next) {
-	req.user_id = req.user._id;
+const { findRaces } = require('../../models/race');
 
-	races.getRaces(req, res, () => {
-		console.log(req.data);
-		res.render('races', { user: req.user, races: req.data});
-	})
+router.get('/', login.isLoggedIn, function(req, res, next) {
+	const user = req.user;
+
+	findRaces(user._id)
+		.then(races => {
+			res.render('races', { user, races });
+		})
+		.fail(err => next(err));
 });
 
 // Export

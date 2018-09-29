@@ -17,6 +17,29 @@ var raceSchema = mongoose.Schema({
         ]
     }
 });
+const Race = mongoose.model('Race', raceSchema);
+
+function findRaces(userId) {
+    return Race.find({ Owners: userId});
+}
+
+function addRace(race, userId) {
+    const newRace = {
+        ...race,
+        Owners: [
+            { "_id": userId }
+        ]
+    };
+
+    return new Race(newRace)
+        .save()
+}
 
 // create the model for users and expose it to our app
 module.exports = mongoose.model('Race', raceSchema);
+
+module.exports = {
+    Race,
+    findRaces,
+    addRace,
+}

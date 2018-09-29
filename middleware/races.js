@@ -1,5 +1,7 @@
-var mongoose = require('mongoose');
-Race = mongoose.model('Race');
+//var mongoose = require('mongoose');
+//Race = mongoose.model('Race');
+
+const { Race, findRaces, addRace } = require('../models/race');
 
 module.exports = {
     getRaces(req, res, next){
@@ -7,7 +9,7 @@ module.exports = {
 
         result
             .then(data => {
-                req.data = data;
+                res.locals.data = data;
                 next();
             })
             .fail(err => next(err));
@@ -18,7 +20,7 @@ module.exports = {
         race
             .save()
             .then(data => {
-                req.data = data;
+                req.locals.data = data;
                 next();
             })
             .fail(err =>  next(err));

@@ -16,11 +16,6 @@ var swaggerSpec = swaggerJSDoc(options);
 var mongoose = require('mongoose');
 // /Data Access Layer
 
-// Models
-require('./models/race');
-require('./models/user');
-// /Models
-
 // authentication
 var passport = require("passport");
 // /authentication
@@ -48,6 +43,8 @@ function handleError(req, res, statusCode, message){
 
 var app = express();
 
+const isDevelopment = app.get('env') === 'development';
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -68,6 +65,20 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 app.use('/', require('./routes/index')(app, passport, handleError));
 app.use('/cms/races', require('./routes/cms/races')(handleError));
+
+app.use('/api/', (req, res, next) => {
+    passport.authenticate('basic', { session: false }, (err, user, info) => {
+        if(err) { return next(err) }
+        if(!user) { 
+            res.status(401);
+            res.json({ error: "Unauthorized" });
+        }
+        if(user) {
+            req.login(user, next);
+        }
+    })(req, res, next);  
+});
+
 app.use('/api/races', require('./routes/api/races')(handleError));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -80,6 +91,14 @@ app.use(function(req, res, next) {
 });
 
 // error handlers
+app.use('/api', (err, req, res, next) => {
+    res.status(500);
+    res.json({
+        name: err.name,
+        message: err.message,
+        stack: isDevelopment && err.stack
+    });
+});
 
 // development error handler
 // will print stacktrace

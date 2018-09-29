@@ -4,21 +4,7 @@ var router = express();
 var handleError;
 var races = require('../../middleware/races');
 
-var mongoose = require('mongoose');
-Race = mongoose.model('Race');
-
-// router.param('user_id', (req, res, next, user_id) => {
-// 	// sample user, would actually fetch from DB, etc...
-// 	console.log('params:'+user_id);
-// 	req.user_id = user_id;
-// 	next();
-// });
-
-function get_user_id(req, res, next) {
-	console.log('params:'+ req.query.user_id);
-	req.user_id = req.query.user_id;
-	next();
-}
+const { Race, findRaces, addRace } = require('../../models/race');
 
 // Routing
 
@@ -41,12 +27,22 @@ function get_user_id(req, res, next) {
  */
 
 router.route('/')
-	.get(get_user_id, races.getRaces, function(req, res, next) {
-		return res.json(req.data);
+	.get((req, res, next) => {
+		const user = req.user;
+
+		findRaces(user._id)
+			.then(races => {
+				res.status(201);
+				return res.json(races);
+			})
+			.fail(err => {
+				res.status(err.status || 500);
+				res.json(err);
+			})
 	})
 	.post(races.addRace, function(req, res, next) {
 		res.status(201);
-		res.json(req.data);
+		res.json(res.locals.data);
 	});
 
 // Export
@@ -56,3 +52,37 @@ module.exports = function (errCallback){
 	handleError = errCallback;
 	return router;
 };
+
+
+// galaxysweeper.com/api/users/:userid/games
+
+// GET kroegentocht.ninja/api/races 
+// Authorization: bearer token_with_user_id
+// ||
+// Cookie: cookie_with_user_id
+
+// - admin
+//   - /api/races
+//     - GET
+//     - POST
+//   - /api/races/:raceid
+//     - GET
+//     - PUT
+//     - DELETE
+//   - /api/races/:raceid/places
+//     - GET
+//     - POST
+//   - /api/races/:raceid/places/:placeid
+//     - DELETE
+//   - /api/places/
+//     - GET
+//   - /api/places/:placeid
+//     - GET
+// - user
+//   - /api/races/:raceid/join || /api/races/join
+//     - POST { secret: "bla" }
+//   - /api/races/
+//     - GET
+//   - /api/races/:raceid/places/:placeid/check-in
+
+// - public

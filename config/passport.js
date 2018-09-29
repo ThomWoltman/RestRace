@@ -1,12 +1,14 @@
 // load all the things we need
-var LocalStrategy   = require('passport-local').Strategy;
-var FacebookStrategy = require('passport-facebook').Strategy;
+const LocalStrategy   = require('passport-local').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
+const { BasicStrategy } = require('passport-http');
 
 // load the auth variables
-var configAuth = require('./auth');
+const configAuth = require('./auth');
 
-var mongoose = require('mongoose');
-User = mongoose.model('User');
+const mongoose = require('mongoose');
+
+const { User } = require('../models/user');
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
@@ -115,6 +117,17 @@ module.exports = function(passport) {
         });
 
     }));
+
+    passport.use(new BasicStrategy(
+        function(username, password, done) {
+          User.findOne({ 'local.email': username }, function (err, user) {
+            if (err) { return done(err); }
+            if (!user) { return done(null, false); }
+            if (!user.validPassword(password)) { return done(null, false); }
+            return done(null, user);
+          });
+        }
+      ));
 
     // =========================================================================
     // FACEBOOK ================================================================
