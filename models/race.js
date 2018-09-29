@@ -6,8 +6,14 @@ var Schema = mongoose.Schema;
 // define the schema for our user model
 const raceSchema = mongoose.Schema({
 
-    Name: String,
-    Secret: String,
+    Name: {
+        type: String,
+        required: [true, "Name is required"]
+    },
+    Secret: {
+        type: String,
+        required: [true, "Secret is required"]
+    },
     Owners: {
         type: [
             {

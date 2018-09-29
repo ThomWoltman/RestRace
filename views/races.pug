@@ -4,6 +4,10 @@ block content
 
   .container
         h1 Races
+        if errorMessage.length > 0
+          .alert.alert-danger #{errorMessage}
+        if message.length > 0
+          .alert.alert-success #{message}  
         div #{user._id}
         ul
           each race in races
@@ -13,20 +17,20 @@ block content
         .modal.fade(id='exampleModal', tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
           .modal-dialog(role='document')
             .modal-content
-              .modal-header
-                h5#exampleModalLabel.modal-title New Race
-                button.close(type='button', data-dismiss='modal', aria-label='Close')
-                  span(aria-hidden='true') ×
-              .modal-body
-                form
-                  .form-group
-                    label.col-form-label(for='Name') Name:  
-                    a.tooltip-test.fas.fa-info-circle(href='#', title='Name of the race')
-                    input#recipient-name.form-control(type='text')
-                  .form-group
-                    label.col-form-label(for='Secret') Secret:
-                    a.tooltip-test.fas.fa-info-circle(href='#', title='Secret is used to participate in the event')
-                    input#recipient-name.form-control(type='text')
-              .modal-footer
-                button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-                button.btn.btn-primary(type='button') Add
+              form(method='POST')
+                .modal-header
+                  h5#exampleModalLabel.modal-title New Race
+                  button.close(type='button', data-dismiss='modal', aria-label='Close')
+                    span(aria-hidden='true') ×
+                .modal-body
+                    .form-group
+                      label.col-form-label(for='Name') Name:  
+                      a.tooltip-test.fas.fa-info-circle(href='#', title='Name of the race')
+                      input#recipient-name.form-control(type='text', name="Name")
+                    .form-group
+                      label.col-form-label(for='Secret') Secret:
+                      a.tooltip-test.fas.fa-info-circle(href='#', title='Secret is used to participate in the event')
+                      input#recipient-name.form-control(type='text', name="Secret")
+                .modal-footer
+                  button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+                  button.btn.btn-primary(type='submit') Add
