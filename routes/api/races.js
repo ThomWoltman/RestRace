@@ -2,9 +2,15 @@ var express = require('express');
 var _ = require('underscore');
 var router = express();
 var handleError;
-var races = require('../../middleware/races');
 
 const { Race, findRaces, addRace } = require('../../models/race');
+
+let user;
+
+router.all('/', (req, res, next) => {
+	user = req.user;
+	next();
+})
 
 // Routing
 
@@ -28,21 +34,20 @@ const { Race, findRaces, addRace } = require('../../models/race');
 
 router.route('/')
 	.get((req, res, next) => {
-		const user = req.user;
-
 		findRaces(user._id)
 			.then(races => {
 				res.status(201);
-				return res.json(races);
+				res.json(races);
 			})
-			.fail(err => {
-				res.status(err.status || 500);
-				res.json(err);
-			})
+			.fail(err => next(err))
 	})
-	.post(races.addRace, function(req, res, next) {
-		res.status(201);
-		res.json(res.locals.data);
+	.post((req, res, next) => {
+		addRace(req.body, user._id)
+			.then(race => {
+				res.status(201);
+				res.json(race);
+			})
+			.fail(err => next(err))
 	});
 
 // Export

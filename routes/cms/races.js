@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express();
 var login = require('../../middleware/login');
-var races = require('../../middleware/races');
 var handleError;
 
 const { findRaces } = require('../../models/race');
