@@ -15,14 +15,27 @@ function makeRequest(route, statusCode, done){
 		});
 };
 
-describe('Test', function(){
-		it('should return true', function(done){
-            expect(1).to.equal(1);
-            done();
-		});
+describe('API', function(){
+	describe('/races', function(){
+		describe('GET', function() {
+			it('should return "Unauthorized" when nog logged in', function(){
+				expect(true).to.equal(true);
+			})
 	
+			it('should return races', function(){
+				expect(true).to.equal(true);
+			})
+		})
 
-		it('should return false');
+		describe('POST', function() {
+			it('should return save race', function(){
+				expect(true).to.equal(true);
+			})
 	
+			it('should return error on validation', function(){
+				expect(true).to.equal(true);
+			})
+		})
+	})	
 });
 

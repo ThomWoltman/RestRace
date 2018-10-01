@@ -26,8 +26,12 @@ var userSchema = mongoose.Schema({
         token        : String,
         email        : String,
         name         : String
+    },
+    role : {
+        type : String,
+        enum : ['admin', 'normal'],
+        default: 'normal'
     }
-
 });
 
 // methods ======================
@@ -40,6 +44,10 @@ userSchema.methods.generateHash = function(password) {
 userSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.local.password);
 };
+
+userSchema.methods.isAdmin = function() {
+    return this.role === 'admin';
+}
 
 const User = mongoose.model('User', userSchema);
 

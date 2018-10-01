@@ -11,9 +11,10 @@ block content
         a.btn.btn-default(href='/cms/races')
           span.fa.fa-beer
           |  Races    
-        a.btn.btn-default(href='#')
-          span.fa.fa-address-book
-          |  Users
+        if(isAdmin)  
+          a.btn.btn-default(href='/cms/users')
+            span.fa.fa-address-book
+            |  Users
         a.btn.btn-default(href='/profile')
           span.fa.fa-user
           |  Profile 

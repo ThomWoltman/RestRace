@@ -5,7 +5,7 @@ var login = require('../middleware/login');
 module.exports = function(app, passport){
   /* GET home page. */
 router.get('/', login.isLoggedIn, function(req, res, next) {
-  res.render('index', { title: 'Rest Race', user: req.user });
+  res.render('index', { title: 'Rest Race', user: req.user, isAdmin: req.user.isAdmin() });
 });
 
 router.get('/signup', login.isNotLoggedIn, function(req, res, next) {

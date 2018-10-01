@@ -29,6 +29,9 @@ mongoose.Promise = require('q').Promise;
 
 require('./config/passport.js')(passport); // pass passport for configuration
 
+//middleware
+var login = require('./middleware/login');
+var users = require('./middleware/role');
 
 function handleError(req, res, statusCode, message){
     console.log();
@@ -64,7 +67,12 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 app.use('/', require('./routes/index')(app, passport, handleError));
-app.use('/cms/races', require('./routes/cms/races')(handleError));
+
+app.use('/cms/', login.isLoggedIn); //can only access cms when logged in
+
+app.use('/cms/races', require('./routes/cms/races')());
+
+app.use('/cms/users', users.isAdmin, require('./routes/cms/users')()); //can only access when admin
 
 app.use('/api/', (req, res, next) => {
     passport.authenticate('basic', { session: false }, (err, user, info) => {

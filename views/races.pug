@@ -4,10 +4,10 @@ block content
 
   .container
         h1 Races
-        if errorMessage.length > 0
-          .alert.alert-danger #{errorMessage}
         if message.length > 0
-          .alert.alert-success #{message}  
+          .alert.alert-success #{message}
+        each error in errorMessage
+          .alert.alert-danger #{error.message}    
         div #{user._id}
         ul
           each race in races
@@ -26,11 +26,11 @@ block content
                     .form-group
                       label.col-form-label(for='Name') Name:  
                       a.tooltip-test.fas.fa-info-circle(href='#', title='Name of the race')
-                      input#recipient-name.form-control(type='text', name="Name")
+                      input#recipient-name.form-control(type='text', name="Name", value=name)
                     .form-group
                       label.col-form-label(for='Secret') Secret:
                       a.tooltip-test.fas.fa-info-circle(href='#', title='Secret is used to participate in the event')
-                      input#recipient-name.form-control(type='text', name="Secret")
+                      input#recipient-name.form-control(type='text', name="Secret", value=secret)
                 .modal-footer
                   button.btn.btn-secondary(type='button', data-dismiss='modal') Close
                   button.btn.btn-primary(type='submit') Add
