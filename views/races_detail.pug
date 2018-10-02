@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  
+  .container
+        each error in errorMessage
+            .alert.alert-danger.alert-dismissible(role='alert')
+                span.close(type='button', data-dismiss='alert', aria-label='Close')
+                    span(aria-hidden='true') ×
+                | #{error.message}
+
+        form(method='POST', action='/cms/races/'+race._id+'/update')
+            
+            input#recipient-name.form-control(type='hidden', name="_id", value=race._id)
+            .form-group
+                label(for='Name') Name:  
+                a.tooltip-test.fas.fa-info-circle(href='#', title='Name of the race')
+                input#recipient-name.form-control(type='text', name="Name", placeholder="Name", value=race.Name)
+            .form-group
+                label(for='Secret') Secret:
+                a.tooltip-test.fas.fa-info-circle(href='#', title='Secret is used to participate in the event')
+                input#recipient-name.form-control(type='text', name="Secret", placeholder="Secret", value=race.Secret)
+            button.btn.btn-primary(type='submit') Save changes
+

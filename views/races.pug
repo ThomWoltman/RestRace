@@ -1,36 +1,79 @@
 extends layout
 
 block content
+  script.
+    $(document).on("click", "#deleteRace", function () {
+        var raceId = $(this).data('id');
+        $(".modal-body #race-id").val( raceId );
+        $(".modal-content #deleteRaceForm").attr('action', '/cms/races/'+raceId+'/delete');
+    });
 
   .container
         h1 Races
-        if message.length > 0
-          .alert.alert-success #{message}
-        each error in errorMessage
-          .alert.alert-danger #{error.message}    
-        div #{user._id}
-        ul
-          each race in races
-            li= race.Name
+        if successMessage.length > 0
+          .alert.alert-success.alert-dismissible(role='alert')
+            span.close(type='button', data-dismiss='alert', aria-label='Close')
+              span(aria-hidden='true') ×
+            | #{successMessage}  
 
-        button.btn.btn-link.fas.fa-plus(type='button', data-toggle='modal', data-target='#exampleModal', data-whatever='@mdo') 
-        .modal.fade(id='exampleModal', tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+        each error in errorMessage
+          .alert.alert-danger.alert-dismissible(role='alert')
+            span.close(type='button', data-dismiss='alert', aria-label='Close')
+              span(aria-hidden='true') ×
+            | #{error.message}      
+
+        button.btn.btn-success.fas.fa-plus(type='button', data-toggle='modal', data-target='#addRaceModal', data-whatever='@mdo')
+
+        table.table.table-striped
+          thead
+            tr
+              th(scope='col') ID
+              th(scope='col') Name
+              th(scope='col') Secret
+              th(scope='col')
+          tbody
+            each race in races
+              tr
+                th(scope='row') #{race._id}
+                td #{race.Name}
+                td #{race.Secret}
+                td
+                  a.button.btn.btn-primary.fas.fa-edit(href='/cms/races/'+race._id+'/')
+                  button.btn.btn-danger.far.fa-trash-alt(id='deleteRace', type='button', data-toggle='modal', data-target='#deleteRaceModal', data-id=race._id)
+ 
+        .modal.fade(id='addRaceModal', tabindex='-1', role='dialog', aria-labelledby='addRaceModalLabel', aria-hidden='true')
           .modal-dialog(role='document')
             .modal-content
               form(method='POST')
                 .modal-header
-                  h5#exampleModalLabel.modal-title New Race
+                  h5#addRaceModalLabel.modal-title New Race
                   button.close(type='button', data-dismiss='modal', aria-label='Close')
                     span(aria-hidden='true') ×
                 .modal-body
                     .form-group
                       label.col-form-label(for='Name') Name:  
                       a.tooltip-test.fas.fa-info-circle(href='#', title='Name of the race')
-                      input#recipient-name.form-control(type='text', name="Name", value=name)
+                      input#recipient-name.form-control(type='text', name="Name", placeholder="Name", value=name)
                     .form-group
                       label.col-form-label(for='Secret') Secret:
                       a.tooltip-test.fas.fa-info-circle(href='#', title='Secret is used to participate in the event')
-                      input#recipient-name.form-control(type='text', name="Secret", value=secret)
+                      input#recipient-name.form-control(type='text', name="Secret", placeholder="Secret", value=secret)
                 .modal-footer
                   button.btn.btn-secondary(type='button', data-dismiss='modal') Close
                   button.btn.btn-primary(type='submit') Add
+        
+        .modal.fade(id='deleteRaceModal', tabindex='-1', role='dialog', aria-labelledby='deleteRaceModal', aria-hidden='true')
+          .modal-dialog(role='document')
+            .modal-content
+              form#deleteRaceForm(method='POST')
+                .modal-header
+                  h5#deleteRaceModalLabel.modal-title Delete Race
+                  button.close(type='button', data-dismiss='modal', aria-label='Close')
+                    span(aria-hidden='true') ×
+                .modal-body
+                    .form-group
+                      input#race-id.form-control(type='hidden')
+                    <p>Are you sure you want to delete this race?</p>  
+                .modal-footer
+                  button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+                  button.btn.btn-danger(type='submit') Delete                      

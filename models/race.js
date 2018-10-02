@@ -41,6 +41,22 @@ function addRace(race, userId) {
         .save()
 }
 
+function deleteRace(raceId, userId){
+    return Race.remove({ _id: raceId, Owners: userId});
+}
+
+function findSingleRace(raceId) {
+    return Race.findById(raceId);
+}
+
+function findSingleRaceByOwner(raceId, userId) {
+    return Race.findOne({ _id: raceId, Owners: userId});
+}
+
+function updateRace(race) {
+    return Race.update({ _id: race._id}, { $set: { Name: race.Name, Secret: race.Secret } }, {runValidators:true});
+}
+
 // create the model for users and expose it to our app
 module.exports = mongoose.model('Race', raceSchema);
 
@@ -48,4 +64,8 @@ module.exports = {
     Race,
     findRaces,
     addRace,
+    deleteRace,
+    findSingleRace,
+    findSingleRaceByOwner,
+    updateRace,
 }
