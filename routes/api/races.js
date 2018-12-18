@@ -19,11 +19,6 @@ router.all('*', (req, res, next) => {
  * /api/races:
  *   get:
  *     description: Get list of all races
- *     parameters:
- *       - name: user_id
- *         required: true
- *         schema:
- *          type: string 
  *     produces:
  *       - application/json
  *     responses:
@@ -31,6 +26,8 @@ router.all('*', (req, res, next) => {
  *         description: List of races
  * 		 	
  */
+
+
 
 router.route('/')
 	.get((req, res, next) => {

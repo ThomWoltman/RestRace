@@ -53,8 +53,8 @@ function findSingleRaceByOwner(raceId, userId) {
     return Race.findOne({ _id: raceId, Owners: userId});
 }
 
-function updateRace(race) {
-    return Race.update({ _id: race._id}, { $set: { Name: race.Name, Secret: race.Secret } }, {runValidators:true});
+function updateRace(race, userId) {
+    return Race.update({ _id: race._id, Owners: userId}, { $set: { ...race } }, {runValidators:true});
 }
 
 // create the model for users and expose it to our app

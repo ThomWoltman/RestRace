@@ -65,7 +65,7 @@ router.post('/:id/delete', (req, res, next) => {
 })
 
 router.post('/:id/update', (req, res, next) => {
-	updateRace(req.body)
+	updateRace(req.body, req.user._id)
 		.then(result => {
 			console.log(result);
 			if(result.nModified > 0){
