@@ -1,7 +1,47 @@
 extends layout
 
 block content
+  script.
+    $(document).on("click", "#deleteUser", function () {
+        var userId = $(this).data('id');
+        $(".modal-body #user-id").val( userId );
+        $(".modal-content #deleteUserForm").attr('action', '/cms/users/'+userId+'/delete');
+    });
 
   .container
         h1 Users
+        if successMessage.length > 0
+          .alert.alert-success.alert-dismissible(role='alert')
+            span.close(type='button', data-dismiss='alert', aria-label='Close')
+              span(aria-hidden='true') ×
+            | #{successMessage}  
         
+        table.table.table-striped
+          thead
+            tr
+              th(scope='col') ID
+              th(scope='col') Email
+              th(scope='col')
+          tbody
+            each user in users
+              tr
+                td #{user._id}
+                td #{user.local.email}
+                td
+                  button.btn.btn-danger.far.fa-trash-alt(id='deleteUser', type='button', data-toggle='modal', data-target='#deleteUserModal', data-id=user._id)
+
+          .modal.fade(id='deleteUserModal', tabindex='-1', role='dialog', aria-labelledby='deleteUserModal', aria-hidden='true')
+            .modal-dialog(role='document')
+              .modal-content
+                form#deleteUserForm(method='POST')
+                  .modal-header
+                    h5#deleteUserModalLabel.modal-title Delete User
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                      span(aria-hidden='true') ×
+                  .modal-body
+                      .form-group
+                        input#user-id.form-control(type='hidden')
+                      <p>Are you sure you want to delete this user?</p>  
+                  .modal-footer
+                    button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+                    button.btn.btn-danger(type='submit') Delete

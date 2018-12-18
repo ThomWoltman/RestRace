@@ -34,6 +34,14 @@ var userSchema = mongoose.Schema({
     }
 });
 
+function findUsers() {
+    return User.find();
+}
+
+function deleteUser(userId){
+    return User.remove({ _id: userId});
+}
+
 // methods ======================
 // generating a hash
 userSchema.methods.generateHash = function(password) {
@@ -53,5 +61,7 @@ const User = mongoose.model('User', userSchema);
 
 // create the model for users and expose it to our app
 module.exports = {
-    User
+    User,
+    findUsers,
+    deleteUser
 }

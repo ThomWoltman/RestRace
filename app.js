@@ -74,6 +74,8 @@ app.use('/cms/races', require('./routes/cms/races')());
 
 app.use('/cms/users', users.isAdmin, require('./routes/cms/users')()); //can only access when admin
 
+app.use('/cms/places', users.isAdmin, require('./routes/cms/places')());
+
 app.use('/api/', (req, res, next) => {
     passport.authenticate('basic', { session: false }, (err, user, info) => {
         if(err) { return next(err) }
