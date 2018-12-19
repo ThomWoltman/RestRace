@@ -1,5 +1,5 @@
 module.exports = {
   
-    'key' : 'blablabla' //API key google places
+    'key' : process.env.PLACES_KEY //API key google places
 
 };
