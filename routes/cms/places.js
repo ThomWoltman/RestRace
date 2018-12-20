@@ -5,7 +5,7 @@ const url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=<<
 const { findPlaces } = require('../../models/places');
 
 router.get('/', (req, res, next) => {
-    findPlaces(1, 1, 1)
+    findPlaces({ lat: 51.8380095, long: 5.8746107 }, { type : 'cafe', rankby: 'distance'})
         .end((err, result) => {
             if(err) { next(err); }
             console.log(result.body.results);
