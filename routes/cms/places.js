@@ -8,9 +8,9 @@ router.get('/', (req, res, next) => {
     findPlaces(1, 1, 1)
         .end((err, result) => {
             if(err) { next(err); }
-            console.log(result.body);
+            console.log(result.body.results);
             console.log(result.body.url);
-            res.render('places', { key } );
+            res.render('places', { key, places : result.body.results } );
         });
 });
 

@@ -5,3 +5,17 @@ block content
   .container
         h1 Places
         | #{key}
+
+        table.table.table-striped
+          thead
+            tr
+              th(scope='col') ID
+              th(scope='col') Name
+              th(scope='col') Adress
+          tbody
+            each place in places
+              tr
+                th(scope='row') #{place.id}
+                td #{place.name}
+                td #{place.vicinity}
+                td
