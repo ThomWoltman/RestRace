@@ -3,6 +3,12 @@ extends layout
 block content
   
   .container
+        if successMessage.length > 0
+          .alert.alert-success.alert-dismissible(role='alert')
+            span.close(type='button', data-dismiss='alert', aria-label='Close')
+              span(aria-hidden='true') ×
+            | #{successMessage}  
+
         each error in errorMessage
             .alert.alert-danger.alert-dismissible(role='alert')
                 span.close(type='button', data-dismiss='alert', aria-label='Close')
@@ -20,5 +26,23 @@ block content
                 label(for='Secret') Secret:
                 a.tooltip-test.fas.fa-info-circle(href='#', title='Secret is used to participate in the event')
                 input#recipient-name.form-control(type='text', name="Secret", placeholder="Secret", value=race.Secret)
+            
+            h4 Places:
+            a.btn.btn-success.fas.fa-plus(href='/cms/races/'+race._id+'/places')
+
+            table.table.table-striped(name='Places')
+                thead
+                    tr
+                    th(scope='col') ID
+                    th(scope='col') Name
+                    th(scope='col') Address
+                tbody
+                    each place in race.Places
+                        tr
+                            th(scope='row') #{place.place_id}
+                            td #{place.name}
+                            td #{place.vicinity}
+                            td
+ 
             button.btn.btn-primary(type='submit') Save changes
 

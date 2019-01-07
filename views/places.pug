@@ -4,18 +4,24 @@ block content
 
   .container
         h1 Places
-        | #{key}
 
-        table.table.table-striped
-          thead
-            tr
-              th(scope='col') ID
-              th(scope='col') Name
-              th(scope='col') Adress
-          tbody
-            each place in places
+        form(method='POST', action='/cms/races/'+raceId+'/places')
+
+          table.table.table-striped
+            thead
               tr
-                th(scope='row') #{place.id}
-                td #{place.name}
-                td #{place.vicinity}
-                td
+                th(scope='col')
+                th(scope='col') ID
+                th(scope='col') Name
+                th(scope='col') Adress
+            tbody
+              each place in places
+                tr
+                  td
+                    input(type="checkbox", name="places[]", value=place)
+                  th(scope='row') #{place.place_id}
+                  td #{place.name}
+                  td #{place.vicinity}
+                  td
+
+          button.btn.btn-primary(type='submit') Add
