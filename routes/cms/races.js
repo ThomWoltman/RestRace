@@ -41,6 +41,7 @@ router.post('/', (req, res, next) => {
 router.get('/:id', (req, res, next) =>{
 	findSingleRaceByOwner(req.params.id, req.user._id)
 		.then(result => {
+			console.log(result);
 			if(result){
 				res.render('races_detail', {
 					race: result,
@@ -52,7 +53,7 @@ router.get('/:id', (req, res, next) =>{
 				res.redirect('/');
 			}
 		})
-		.fail(err => next(err))
+		.catch(err => next(err));
 })
 
 router.get('/:id/places', (req, res, next) =>{
@@ -66,19 +67,8 @@ router.get('/:id/places', (req, res, next) =>{
 })
 
 router.post('/:id/places', (req, res, next) =>{
-	let places = [];
-
-    req.body.places.forEach(place => {
-        place = JSON.parse(place);
-        var newPlace = {};
-        newPlace.name = place.name;
-        newPlace.vicinity = place.vicinity;
-        newPlace.place_id = place.place_id;
-        places.push(newPlace);
-    });
-	
-	if(places){
-		addPlaces(places, req.params.id, req.user._id)
+	if(req.body.places){
+		addPlaces(req.body.places, req.params.id, req.user._id)
 		.then(result => {
 			req.flash('raceSuccessMessage', 'Race geüpdate!');
 			res.redirect('/cms/races/'+req.params.id);

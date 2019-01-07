@@ -35,7 +35,7 @@ function findSinglePlace(id){
         .query({
             key: api_key,
             placeid: id,
-            fields: 'vicinity,name,photo' 
+            fields: 'vicinity,name,place_id',
         });
 }
 

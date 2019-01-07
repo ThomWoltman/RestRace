@@ -27,20 +27,12 @@ const raceSchema = mongoose.Schema({
     Places: {
         type: [
             {
-                place_id :{
-                    type: String
-                },
-                name :{
-                    type: String
-                },
-                vicinity : {
-                    type: String
-                }
+                type: String
             }
         ]
-    }
-    
+    }  
 });
+
 const Race = mongoose.model('Race', raceSchema);
 
 function findRaces(userId) {
@@ -72,20 +64,95 @@ function addPlaces(Places, raceId, userId){
 }
 
 function findSingleRaceByOwner(raceId, userId) {
-    return Race.findOne({ _id: raceId, Owners: userId});
-        // .then(result => {
-        //     result.Places.forEach(place => {
-        //         console.log('####################'+place);
-        //         findSinglePlace(place)
-        //             .then(placeResult => {
-        //                 place.Address = placeResult.vicinity;
-        //                 place.Name = placeResult.name;
-        //             })
-        //             .fail(err => next(err));
-        //     });
-        //     return result;
-        // })
-        // .fail(err => next(err));
+    //return Race.findOne({ _id: raceId, Owners: userId});
+
+    let newpromise = new Promise((resolve, reject) => {
+        Race.findOne({ _id: raceId, Owners: userId}).lean().exec(function(err, race) {
+            if(err) {
+                reject(err);
+            }    
+    
+            getPlaces(race.Places)
+                .then(places => {
+                    console.log("places###");
+                    console.log(places);
+                    let resultRace = createRaceWithPlacesObject(race, places);
+                    resolve(resultRace);
+                })
+                .catch(err => {
+                    console.log("error");
+                    reject(err);
+                    }); 
+        });
+    })
+
+    return newpromise;
+
+    // let promise = Race.findOne({ _id: raceId, Owners: userId}).lean().exec(err => {
+    //     console.log(err);
+    //     reject(err);
+    // }, 
+    //     race => {
+    //         getPlaces(race.Places)
+    //             .then(places => {
+    //                 let resultRace = createRaceWithPlacesObject(race, places);
+    //                 resolve(resultRace);
+    //             })
+    //             .then(undefined, error => {
+    //                 reject(error);
+    //             }) 
+    //     });
+        
+}
+
+//functie die alle places ophaalt
+function getPlaces(placeids){
+    console.log("placeids");
+    console.log(placeids);
+
+    // findSinglePlace(placeids[0])
+    //     .end((err, place) => {
+    //         console.log("singleplaceerror");
+    //         console.log(err);
+    //         console.log("singleplaceresult");
+    //         console.log(place.body.result);
+    //     })
+
+    return new Promise((resolve, reject) => {
+        let promises = [];
+        
+        let places = [];
+        placeids.forEach(placeid => {
+            let promise = new Promise((resolve1, reject1) => {
+                findSinglePlace(placeid)
+                .end((err, place) => {
+                    if(err) reject1(err);
+                    places.push(place.body.result);
+                    resolve1();
+                })
+            })
+            promises.push(promise);
+        });
+        Promise.all(promises).then(result => resolve(places)).catch(err => reject(err));
+    });
+}
+
+function createRaceWithPlacesObject(race, places){
+    console.log('places');
+    console.log(places);
+    let newPlaces = [];
+
+    places.forEach(place => {
+        var newPlace = {};
+        newPlace.name = place.name;
+        newPlace.vicinity = place.vicinity;
+        newPlace.place_id = place.place_id;
+        newPlaces.push(newPlace);
+    });
+
+    race.Places = newPlaces;
+
+    return race;
 }
 
 function updateRace(race, userId) {
