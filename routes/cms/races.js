@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express();
 
-const { findPlaces } = require('../../models/places');
+const { findPlaces, findPlacesByQuery } = require('../../models/places');
 const { findRaces, addRace, deleteRace, findSingleRaceByOwner, updateRace, addPlaces } = require('../../models/race');
 
 router.get('/', (req, res, next) => {
@@ -41,8 +41,8 @@ router.post('/', (req, res, next) => {
 router.get('/:id', (req, res, next) =>{
 	findSingleRaceByOwner(req.params.id, req.user._id)
 		.then(result => {
-			console.log(result);
 			if(result){
+				console.log(result);
 				res.render('races_detail', {
 					race: result,
 					errorMessage: req.flash('raceErrorMessage'),
@@ -57,13 +57,18 @@ router.get('/:id', (req, res, next) =>{
 })
 
 router.get('/:id/places', (req, res, next) =>{
-	findPlaces({ lat: 51.8380095, long: 5.8746107 }, { type : 'cafe', rankby: 'distance'})
+	let query = req.query.query;
+
+	if(!query) res.render('places', { places: [], raceId : req.params.id });
+
+	else{
+		findPlacesByQuery(query)
         .end((err, result) => {
-            if(err) { next(err); }
-            console.log(result.body.results);
-            console.log(result.body.url);
-            res.render('places', { places : result.body.results, raceId : req.params.id } );
+			if(err) { next(err); }
+			console.log(result.body);
+            res.render('places', { places : result.body.candidates, raceId : req.params.id } );
         });
+	}
 })
 
 router.post('/:id/places', (req, res, next) =>{
@@ -81,6 +86,14 @@ router.post('/:id/places', (req, res, next) =>{
 		req.flash('raceSuccessMessage', 'Geen places toegevoegd');
 		res.redirect('/cms/races/'+req.params.id);
 	}
+})
+
+router.post('/:id/places/search', (req, res, next) =>{
+	let query = req.body.query;
+
+	if(!query) res.redirect('/cms/races/'+req.params.id+'/places');
+	else res.redirect('/cms/races/'+req.params.id+'/places?query='+query);
+
 })
 
 router.post('/:id/delete', (req, res, next) => {

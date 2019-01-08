@@ -6,6 +6,7 @@ const { findUsers, deleteUser } = require('../../models/user');
 router.get('/', (req, res, next) => {
     findUsers()
     .then(users => {
+        console.log(users);
         res.render('users', { 
             users,
             successMessage: req.flash('userSuccessMessage'),

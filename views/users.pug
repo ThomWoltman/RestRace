@@ -21,12 +21,19 @@ block content
             tr
               th(scope='col') ID
               th(scope='col') Email
+              th(scope='col') Facebook
+              th(scope='col') Role
               th(scope='col')
           tbody
             each user in users
               tr
                 td #{user._id}
-                td #{user.local.email}
+                if user.local.email
+                    td #{user.local.email}
+                else if user.facebook.email
+                    td #{user.facebook.email}    
+                td #{user.facebook.name}
+                td #{user.role}
                 td
                   button.btn.btn-danger.far.fa-trash-alt(id='deleteUser', type='button', data-toggle='modal', data-target='#deleteUserModal', data-id=user._id)
 

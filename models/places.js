@@ -39,6 +39,16 @@ function findSinglePlace(id){
         });
 }
 
+function findPlacesByQuery(query){
+    return superagent.get(placesUrl+'findplacefromtext/json')
+        .query({
+            key: api_key,
+            input: query,
+            inputtype: 'textquery',
+            fields: 'formatted_address,name,place_id', 
+        })
+}
+
 function addPlace(place) {
     const newPlace = {
         ...place,
@@ -53,4 +63,5 @@ module.exports = {
     findPlaces,
     addPlace,
     findSinglePlace,
+    findPlacesByQuery,
 }

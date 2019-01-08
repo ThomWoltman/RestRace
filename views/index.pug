@@ -7,7 +7,10 @@ block content
         h1 Rest Race
         div 
           | logged in as:
-          | #{user.local.email}
+          if user.local.email
+            b #{user.local.email}
+          else if user.facebook.email
+            b #{user.facebook.email}
         a.btn.btn-default(href='/cms/races')
           span.fa.fa-beer
           |  Races    
@@ -18,6 +21,3 @@ block content
         a.btn.btn-default(href='/profile')
           span.fa.fa-user
           |  Profile 
-        a.btn.btn-default(href='/cms/places')
-          span.fa.fa-user
-          |  Places   

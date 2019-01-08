@@ -64,60 +64,25 @@ function addPlaces(Places, raceId, userId){
 }
 
 function findSingleRaceByOwner(raceId, userId) {
-    //return Race.findOne({ _id: raceId, Owners: userId});
-
-    let newpromise = new Promise((resolve, reject) => {
-        Race.findOne({ _id: raceId, Owners: userId}).lean().exec(function(err, race) {
+    return new Promise((resolve, reject) => {
+        Race.findOne({ _id: raceId, Owners: userId}).populate('Owners').lean().exec(function(err, race) {
             if(err) {
                 reject(err);
             }    
     
             getPlaces(race.Places)
                 .then(places => {
-                    console.log("places###");
-                    console.log(places);
                     let resultRace = createRaceWithPlacesObject(race, places);
                     resolve(resultRace);
                 })
                 .catch(err => {
-                    console.log("error");
                     reject(err);
                     }); 
         });
-    })
-
-    return newpromise;
-
-    // let promise = Race.findOne({ _id: raceId, Owners: userId}).lean().exec(err => {
-    //     console.log(err);
-    //     reject(err);
-    // }, 
-    //     race => {
-    //         getPlaces(race.Places)
-    //             .then(places => {
-    //                 let resultRace = createRaceWithPlacesObject(race, places);
-    //                 resolve(resultRace);
-    //             })
-    //             .then(undefined, error => {
-    //                 reject(error);
-    //             }) 
-    //     });
-        
+    });
 }
 
-//functie die alle places ophaalt
 function getPlaces(placeids){
-    console.log("placeids");
-    console.log(placeids);
-
-    // findSinglePlace(placeids[0])
-    //     .end((err, place) => {
-    //         console.log("singleplaceerror");
-    //         console.log(err);
-    //         console.log("singleplaceresult");
-    //         console.log(place.body.result);
-    //     })
-
     return new Promise((resolve, reject) => {
         let promises = [];
         
@@ -138,8 +103,6 @@ function getPlaces(placeids){
 }
 
 function createRaceWithPlacesObject(race, places){
-    console.log('places');
-    console.log(places);
     let newPlaces = [];
 
     places.forEach(place => {

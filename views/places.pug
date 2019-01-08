@@ -5,6 +5,14 @@ block content
   .container
         h1 Places
 
+        form(method='POST', action='/cms/races/'+raceId+'/places/search')
+          .row
+            .col-lg-6
+              .input-group
+                input.form-control(type='text', placeholder='Search for...(for example, a name or address)', name='query')
+                span.input-group-btn
+                  button.btn.btn-default(type='submit') Search!
+
         form(method='POST', action='/cms/races/'+raceId+'/places')
 
           table.table.table-striped
@@ -21,7 +29,8 @@ block content
                     input(type="checkbox", name="places[]", value=place.place_id)
                   th(scope='row') #{place.place_id}
                   td #{place.name}
-                  td #{place.vicinity}
+                  td #{place.formatted_address}
                   td
 
           button.btn.btn-primary(type='submit') Add
+        
