@@ -93,6 +93,7 @@ app.use('/api/', (req, res, next) => {
 });
 
 app.use('/api/races', require('./routes/api/races')(handleError));
+app.use('/api/places', require('./routes/api/places')(handleError));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

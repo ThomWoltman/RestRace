@@ -24,10 +24,24 @@ const raceSchema = mongoose.Schema({
             }
         ]
     },
+    //need validation on places
+    //don't add duplicates
     Places: {
         type: [
             {
                 type: String
+            }
+        ]
+    },
+    Started: {
+        type: Boolean,
+        default: false
+    },
+    Participants: {
+        type: [
+            {
+                type: Schema.Types.ObjectId, 
+                ref: "User",
             }
         ]
     }  
@@ -59,8 +73,30 @@ function findSingleRace(raceId) {
     return Race.findById(raceId);
 }
 
+function findRace(raceId, userId) {
+    return Race.findOne({_id: raceId, Owners: userId});
+}
+
 function addPlaces(Places, raceId, userId){
     return Race.update({ _id: raceId, Owners: userId}, { $push: { Places : { $each : Places} } }, {runValidators:true})
+}
+
+function updatePlaces(raceId, userId, Places) {
+    return Race.update({ _id: raceId, Owners: userId}, { $set: { Places } }, {runValidators:true})
+}
+
+function removePlace(raceId, userId, placeId) {
+    return new Promise((resolve, reject) => {
+        findRace(raceId, userId)
+            .then(result => {
+                if(!result) resolve(result);
+                result.Places = result.Places.filter(function(elementId) {
+                    return elementId != placeId;
+                })
+                resolve(result.save());
+            })
+            .catch(err => reject(err));
+    })
 }
 
 function findSingleRaceByOwner(raceId, userId) {
@@ -122,6 +158,14 @@ function updateRace(race, userId) {
     return Race.update({ _id: race._id, Owners: userId}, { $set: { ...race } }, {runValidators:true});
 }
 
+function getParticipants(raceId, userId) {
+    return Race.findOne({_id: raceId, Owners: userId}, 'Participants');
+}
+
+function addParticipant(raceId, userId, secret){
+    return Race.update({_id: raceId, Secret: secret}, { $push: { Participants: userId }});
+}
+
 // create the model for users and expose it to our app
 module.exports = mongoose.model('Race', raceSchema);
 
@@ -133,5 +177,9 @@ module.exports = {
     findSingleRace,
     findSingleRaceByOwner,
     updateRace,
-    addPlaces
+    addPlaces,
+    updatePlaces,
+    removePlace,
+    getParticipants,
+    addParticipant
 }
