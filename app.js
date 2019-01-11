@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var http = require('http');
 
 //environment variables
 require('dotenv').config();
@@ -135,6 +136,13 @@ app.use(function(err, req, res, next) {
     });
 });
 
-app.listen(8080, () => console.log('Example app listening on port 8080!'))
+//app.listen(8080, () => console.log('Example app listening on port 8080!'))
+
+var port = process.env.PORT || 8080;
+
+app.listen(port, function () {
+  console.log('Express server listening on port ' + port)
+})
+
 
 module.exports = app;
