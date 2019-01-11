@@ -12,7 +12,7 @@
   "dependencies": {
     "async": "*",
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "~1.16.0",
+    "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.0",
@@ -30,8 +30,8 @@
     "passport-twitter": "^1.0.4",
     "pug": "^2.0.0-beta8",
     "q": "^1.4.1",
-    "serve-favicon": "~2.3.2",
-    "superagent": "^3.5.2",
+    "serve-favicon": "^2.5.0",
+    "superagent": "^4.1.0",
     "swagger-jsdoc": "^3.0.2",
     "swagger-ui-express": "^4.0.0",
     "underscore": "*"
