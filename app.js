@@ -114,9 +114,6 @@ app.use('/api', (err, req, res, next) => {
     });
 });
 
-console.log("environment");
-console.log(app.get('env'));
-
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
