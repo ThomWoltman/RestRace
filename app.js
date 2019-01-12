@@ -12,7 +12,25 @@ require('dotenv').config();
 //swagger docs
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-var options = { swaggerDefinition: { /* swaggerDefinition */ },    apis: ['./models/*.js', './routes/api/*.js', './app.js'] };
+var options = { 
+    swaggerDefinition: {
+        swagger: "2.0", 
+        info: {
+            title: 'RestRace'
+        },
+        securityDefinitions: {
+            "basicAuth": {
+              "type": "basic"
+            }
+          },
+          security: [
+            {
+              "basicAuth": []
+            }
+          ]
+     },      
+    apis: ['./models/*.js', './routes/api/*.js', './app.js'],
+};
 var swaggerSpec = swaggerJSDoc(options);
 // /swagger docs
 
@@ -95,7 +113,23 @@ app.use('/api/', (req, res, next) => {
 app.use('/api/races', require('./routes/api/races')(handleError));
 app.use('/api/places', require('./routes/api/places')(handleError));
 
+app.use('/api/users', (req, res, next) => {
+    if(req.user.isAdmin()){
+        next();
+    }
+    else{
+        res.status(401);
+        res.json({ message: "Not authorized to access /api/users"});
+    }
+})
+
+app.use('/api/users', require('./routes/api/users')(handleError));
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.get("/api-docs.json", (req, res) => {
+    res.send(swaggerSpec);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -135,8 +169,6 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
-//app.listen(8080, () => console.log('Example app listening on port 8080!'))
 
 var port = process.env.PORT || 8080;
 

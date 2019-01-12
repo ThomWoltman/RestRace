@@ -14,25 +14,32 @@ router.all('*', (req, res, next) => {
 })
 
 // Routing
+/**
+ * @swagger
+ * tags:
+ * - name: "Race"
+ *   description: "Everything about your Races"
+ */
+
 
 /**
  * @swagger
  * /api/races:
  *   get:
+ *     tags:
+ *       - "Race"
  *     description: Get list of all races
  *     produces:
  *       - application/json
  *     responses:
  *       200:
- *         description: List of races
- *		 500:
- * 		   description: Internal Server Error
- * 		 	
+ *         description: "List of races"
+ *       500:
+ *         description: "Internal Server Error"		 	
  */
 
 router.route('/')
 	.get((req, res, next) => {
-		console.log(req.accepts("html"));
 		findRaces(user._id)
 			.then(races => {
 				res.status(200);

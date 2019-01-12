@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 
-// config/auth.js
 const facebookCallBackUrl = app.get('env') === 'development' ? 'http://localhost:8080/auth/facebook/callback' : 'https://restracethom.herokuapp.com/auth/facebook/callback';
 
 // expose our config directly to our application using module.exports
