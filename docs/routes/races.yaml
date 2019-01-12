@@ -1,0 +1,40 @@
+tags:
+ - name: "Race"
+   description: "Everything about your Races"
+
+/api/races:
+  get:
+    tags:
+      - "Race"
+    description: Get list of all races
+    produces:
+      - application/json
+    responses:
+      200:
+        description: "List of races"
+        schema:
+          $ref: "#/definitions/Race"
+      401:
+        description: Unauthorized
+      500:
+        description: "Internal Server Error"		 	
+  post:
+    tags:
+      - Race 
+    description: Add a Race
+    produces:
+      - application/json
+    parameters:
+      - in: body
+        name: body
+        description: Race that has to be added
+        required: true
+        schema:
+          $ref: '#/definitions/Race'
+    responses:
+      '201':
+        description: created
+        schema:
+          $ref: '#/definitions/Race'
+      '500':
+        description: validation error

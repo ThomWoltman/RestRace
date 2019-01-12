@@ -1,0 +1,22 @@
+definitions:
+  Race:
+    type: "object"
+    properties:
+      Name:
+        type: "string"
+      Secret:
+        type: "string"
+      Owners:
+        type: "array"
+        items: 
+          type: string
+      Places:
+        type: "array"
+        items: 
+          type: string
+      Started:
+        type: "boolean"
+      Participants:
+        type: array
+        items:
+          type: string  

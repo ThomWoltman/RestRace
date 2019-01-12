@@ -18,18 +18,18 @@ var options = {
         info: {
             title: 'RestRace'
         },
-        securityDefinitions: {
+        "securityDefinitions": {
             "basicAuth": {
               "type": "basic"
             }
           },
-          security: [
+          "security": [
             {
               "basicAuth": []
             }
           ]
      },      
-    apis: ['./models/*.js', './routes/api/*.js', './app.js'],
+    apis: ['./models/*.js', './app.js', './routes/api/*.js','./docs/models/*.yaml', './docs/routes/*.yaml'],
 };
 var swaggerSpec = swaggerJSDoc(options);
 // /swagger docs
