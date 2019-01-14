@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express();
 
-const { findUsers, deleteUser } = require('../../models/user');
+const { findUsers, deleteUser, updateUser } = require('../../controllers/UserController');
 
 router.get('/', (req, res, next) => {
     findUsers()
@@ -24,6 +24,17 @@ router.post('/:id/delete', (req, res, next) => {
 		.fail(err => {
 			next(err);
 		})
+})
+
+router.post('/:id/role', (req, res, next) => {
+    updateUser(req.params.id, { role: req.query.value })
+        .then(result => {
+            req.flash('userSuccessMessage', 'User "'+req.params.id+'" role updated to '+req.query.value+'!');
+            res.redirect('/cms/users');
+        })
+        .fail(err => {
+            next(err);
+        })
 })
 
 // Export

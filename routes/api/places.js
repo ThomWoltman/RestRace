@@ -3,7 +3,7 @@ var _ = require('underscore');
 var router = express();
 var handleError;
 
-const { findPlacesByQuery, findSinglePlace, findPlaces } = require('../../models/places');
+const { findPlacesByQuery, findSinglePlace, findPlaces } = require('../../controllers/PlaceController');
 
 router.route('/')
     .get((req, res, next) => {

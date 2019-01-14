@@ -5,13 +5,24 @@ block content
   .container
         h1 Places
 
-        form(method='POST', action='/cms/races/'+raceId+'/places/search')
+        form(method='GET', action='/cms/races/'+raceId+'/places')
           .row
             .col-lg-6
               .input-group
                 input.form-control(type='text', placeholder='Search for...(for example, a name or address)', name='query')
                 span.input-group-btn
                   button.btn.btn-default(type='submit') Search!
+        
+        h5 or
+
+        form(method='GET', action='/cms/races/'+raceId+'/places')
+          .row
+            .col-lg-6
+                .input-group
+                  input.form-control(name='longitude', type='text', placeholder='Longitude')
+                  input.form-control(name='latitude', type='text', placeholder='Latitude')
+                  input.form-control(name='radius', type='text', placeholder='Radius(m)')
+                  button.btn.btn-default(type='submit') Search!    
 
         form(method='POST', action='/cms/races/'+raceId+'/places')
 
@@ -29,7 +40,11 @@ block content
                     input(type="checkbox", name="places[]", value=place.place_id)
                   th(scope='row') #{place.place_id}
                   td #{place.name}
-                  td #{place.formatted_address}
+                  td 
+                    if place.formatted_address
+                      | #{place.formatted_address}
+                    else
+                      | #{place.vicinity}
                   td
 
           button.btn.btn-primary(type='submit') Add

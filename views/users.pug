@@ -9,6 +9,8 @@ block content
     });
 
   .container
+        a.btn.btn-default.fas.fa-arrow-left(href='/')
+
         h1 Users
         if successMessage.length > 0
           .alert.alert-success.alert-dismissible(role='alert')
@@ -24,6 +26,7 @@ block content
               th(scope='col') Facebook
               th(scope='col') Role
               th(scope='col')
+              th(scope='col')
           tbody
             each user in users
               tr
@@ -31,10 +34,22 @@ block content
                 if user.local.email
                     td #{user.local.email}
                 else if user.facebook.email
-                    td #{user.facebook.email}    
-                td #{user.facebook.name}
+                    td #{user.facebook.email}
+                if user.facebook.name        
+                  td #{user.facebook.name}
+                else
+                  td Not Connected
                 td #{user.role}
                 td
+                  if(user.role === "normal")
+                    form(method='POST', action='/cms/users/'+user._id+'/role?value=admin')
+                      input(type='hidden', value=user._id)
+                      button.btn.btn-primary(id='updateRole', type='submit') Change role to Admin
+                  else
+                    form(method='POST', action='/cms/users/'+user._id+'/role?value=normal')
+                      input(type='hidden', value=user._id)
+                      button.btn.btn-primary(id='updateRole', type='submit') Change role to Normal
+                td  
                   button.btn.btn-danger.far.fa-trash-alt(id='deleteUser', type='button', data-toggle='modal', data-target='#deleteUserModal', data-id=user._id)
 
           .modal.fade(id='deleteUserModal', tabindex='-1', role='dialog', aria-labelledby='deleteUserModal', aria-hidden='true')

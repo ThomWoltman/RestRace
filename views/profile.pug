@@ -1,12 +1,13 @@
 extends layout
 
 block content
+    
     .container
-      .page-header.text-center
-        h1
-          span.fa.fa-anchor
-          |  Profile Page
-        a.btn.btn-default.btn-sm(href='/logout') Logout
+      a.btn.btn-default.fas.fa-arrow-left(href='/')
+      h1
+        span.fa.fa-anchor
+        |  Profile Page
+      a.btn.btn-default.btn-sm(href='/logout') Logout
       .row
         // LOCAL INFORMATION
         .col-sm-6

@@ -3,8 +3,8 @@ var _ = require('underscore');
 var router = express();
 var handleError;
 
-const { Race, findRaces, addRace, deleteRace, findSingleRace, updateRace, findSingleRaceByOwner, addPlaces, updatePlaces, removePlace, getParticipants, addParticipant } = require('../../models/race');
-const { findSinglePlace } = require('../../models/places');
+const { findRaces, addRace, deleteRace, findSingleRace, updateRace, findSingleRaceByOwner, addPlaces, updatePlaces, removePlace, getParticipants, addParticipant } = require('../../controllers/RaceController');
+const { findSinglePlace } = require('../../controllers/PlaceController');
 
 let user;
 

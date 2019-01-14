@@ -20,48 +20,6 @@ const placeSchema = mongoose.Schema({
 });
 const Place = mongoose.model('Place', placeSchema);
 
-function findPlaces(requiredOptions, optionalOptions){    
-    return superagent.get(placesUrl+'nearbysearch/json')
-        .query({
-            location : requiredOptions.lat+','+requiredOptions.long,
-            radius: requiredOptions.radius,
-            key: api_key,
-            ...optionalOptions
-         });
-}
-
-function findSinglePlace(id){
-    return superagent.get(placesUrl+'details/json')
-        .query({
-            key: api_key,
-            placeid: id,
-            fields: 'vicinity,name,place_id',
-        });
-}
-
-function findPlacesByQuery(query){
-    return superagent.get(placesUrl+'findplacefromtext/json')
-        .query({
-            key: api_key,
-            input: query,
-            inputtype: 'textquery',
-            fields: 'formatted_address,name,place_id', 
-        })
-}
-
-function addPlace(place) {
-    const newPlace = {
-        ...place,
-    };
-
-    return new Place(newPlace)
-        .save()
-}
-
 module.exports = {
-    Place,
-    findPlaces,
-    addPlace,
-    findSinglePlace,
-    findPlacesByQuery,
+    Place
 }

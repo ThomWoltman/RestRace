@@ -34,39 +34,6 @@ var userSchema = mongoose.Schema({
     }
 });
 
-function findUsers() {
-    return User.find();
-}
-
-function deleteUser(userId){
-    return User.remove({ _id: userId});
-}
-
-function findUser(userId){
-    return User.findOne({ _id: userId});
-}
-
-function getRole(userId){
-    return User.findOne({ _id: userId}, 'role');
-}
-
-function updateRole(userId, role){
-    return User.update({ _id: userId}, { $set: { role } }, {runValidators:true});
-}
-
-function addUser(email, password, role='normal') {
-    const user = {
-        local: {
-            email,
-            password,
-        },
-        role
-    };
-
-    return new User(user)
-        .save()
-}
-
 // methods ======================
 // generating a hash
 userSchema.methods.generateHash = function(password) {
@@ -86,11 +53,5 @@ const User = mongoose.model('User', userSchema);
 
 // create the model for users and expose it to our app
 module.exports = {
-    User,
-    findUsers,
-    deleteUser,
-    findUser,
-    addUser,
-    getRole,
-    updateRole,
+    User
 }

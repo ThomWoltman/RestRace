@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express();
 
-const { findPlaces, findPlacesByQuery } = require('../../models/places');
-const { findRaces, addRace, deleteRace, findSingleRaceByOwner, updateRace, addPlaces } = require('../../models/race');
+const { findPlaces, findPlacesByQuery } = require('../../controllers/PlaceController');
+const { findRaces, addRace, deleteRace, findSingleRaceByOwner, updateRace, addPlaces } = require('../../controllers/RaceController');
 
 router.get('/', (req, res, next) => {
 	const user = req.user;
@@ -58,15 +58,23 @@ router.get('/:id', (req, res, next) =>{
 
 router.get('/:id/places', (req, res, next) =>{
 	let query = req.query.query;
+	let long = req.query.longitude;
+	let lat = req.query.latitude;
+	let radius = req.query.radius;
 
-	if(!query) res.render('places', { places: [], raceId : req.params.id });
+	let search;
+
+	if(query) search = findPlacesByQuery(query);
+	else if(long && lat && radius) search = findPlaces({ lat, long, radius }, { type: 'cafe'});
+
+	if(!search) res.render('places', { places: [], raceId : req.params.id });
 
 	else{
-		findPlacesByQuery(query)
+		search
         .end((err, result) => {
 			if(err) { next(err); }
 			console.log(result.body);
-            res.render('places', { places : result.body.candidates, raceId : req.params.id } );
+            res.render('places', { places : result.body.candidates || result.body.results, raceId : req.params.id } );
         });
 	}
 })
@@ -86,14 +94,6 @@ router.post('/:id/places', (req, res, next) =>{
 		req.flash('raceSuccessMessage', 'Geen places toegevoegd');
 		res.redirect('/cms/races/'+req.params.id);
 	}
-})
-
-router.post('/:id/places/search', (req, res, next) =>{
-	let query = req.body.query;
-
-	if(!query) res.redirect('/cms/races/'+req.params.id+'/places');
-	else res.redirect('/cms/races/'+req.params.id+'/places?query='+query);
-
 })
 
 router.post('/:id/delete', (req, res, next) => {

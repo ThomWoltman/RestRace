@@ -26,6 +26,9 @@ block content
                 label(for='Secret') Secret:
                 a.tooltip-test.fas.fa-info-circle(href='#', title='Secret is used to participate in the event')
                 input#recipient-name.form-control(type='text', name="Secret", placeholder="Secret", value=race.Secret)
+            .form-group
+                label(for='Started') Started:
+                input(type='checkbox', name="Started", checked=race.Started)    
             
             button.btn.btn-primary(type='submit') Save changes
 
@@ -72,6 +75,9 @@ block content
                             td #{place.name}
                             td #{place.vicinity}
                             td
+            
+            
+                
 
             a.btn.btn-success.fas.fa-plus(href='/cms/races/'+race._id+'/places')
             

@@ -2,7 +2,8 @@ var express = require('express');
 var _ = require('underscore');
 var router = express(); 
 var handleError;
-const { findUsers, findUser, deleteUser, addUser, getRole, updateRole } = require('../../models/user');
+
+const { findUsers, findUser, deleteUser, addUser, getRole, updateUser } = require('../../controllers/UserController');
 
 router.route('/')
     .get((req, res, next) => {
@@ -68,7 +69,7 @@ router.route('/:id')
             .fail(err => next(err)); 
     })
     .patch((req, res, next) => {
-        updateRole(req.params.id, req.body.role)
+        updateUser(req.params.id, { role: req.body.role })
             .then(result => {
                 res.status(200);
                 res.json(result);
@@ -79,7 +80,7 @@ router.route('/:id')
 
 // Export
 module.exports = function (errCallback){
-	console.log('Initializing places routing module');
+	console.log('Initializing users routing module');
 	
 	handleError = errCallback;
 	return router;
