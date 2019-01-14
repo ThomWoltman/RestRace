@@ -77,6 +77,17 @@ router.route('/:id')
             .fail(err => next(err));
     })
 
+    router.route('/:id/racesparticipated')
+    .get((req, res, next) => {
+        
+    })
+    .post((req, res, next) => {
+        //participate in race
+        //if correct
+        //  add to racesparticipated
+        //else
+        //  return json('message: wrong secret')
+    })
 
 // Export
 module.exports = function (errCallback){

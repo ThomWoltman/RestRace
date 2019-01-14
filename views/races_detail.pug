@@ -60,6 +60,20 @@ block content
                         td #{user.role}
 
         h5
+            b Participants:
+
+        table.table.table-striped(name='Participants')
+            thead
+                tr
+                th(scope='col') ID
+                th(scope='col') checkins
+            tbody
+                each participant in race.Participants
+                    tr
+                        td #{participant._id}   
+                        td 0           
+
+        h5
             b Places:
 
         table.table.table-striped(name='Places')

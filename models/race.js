@@ -44,6 +44,10 @@ const raceSchema = mongoose.Schema({
     }  
 });
 
+raceSchema.methods.validSecret = function(secret) {
+    return this.secret === secret;
+};
+
 const Race = mongoose.model('Race', raceSchema);
 
 module.exports = {

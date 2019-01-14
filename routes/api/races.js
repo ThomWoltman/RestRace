@@ -147,6 +147,10 @@ router.route('/:id')
 	.post((req, res, next) => {
 		addParticipant(req.params.id, user._id, req.body.secret)
 			.then(result => {
+				if(!result) {
+					res.status(404);
+					res.json( { message: 'Wrong race ID' });
+				}
 				if(result.n > 0){
 					res.status(200);
 					res.json(result);

@@ -53,7 +53,7 @@ function removePlace(raceId, userId, placeId) {
 
 function findSingleRaceByOwner(raceId, userId) {
     return new Promise((resolve, reject) => {
-        Race.findOne({ _id: raceId, Owners: userId}).populate('Owners').lean().exec(function(err, race) {
+        Race.findOne({ _id: raceId, Owners: userId}).populate('Owners').populate('Participants').lean().exec(function(err, race) {
             if(err) {
                 reject(err);
             }    

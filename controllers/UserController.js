@@ -33,6 +33,14 @@ function addUser(email, password, role='normal') {
         .save()
 }
 
+function addRace(raceId, userId){
+    return User.update({ _id: userId }, { $push: { racesParticipated: { raceId }}});
+}
+
+function getRaces(userId){
+    return User.findOne({ _id: userId }, 'racesParticipated').populate('racesParticipated.raceId');
+}
+
 // create the model for users and expose it to our app
 module.exports = {
     findUsers,
@@ -40,5 +48,7 @@ module.exports = {
     findUser,
     addUser,
     getRole,
-    updateUser
+    updateUser,
+    addRace,
+    getRaces,
 }

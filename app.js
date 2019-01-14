@@ -91,6 +91,8 @@ app.use('/', require('./routes/index')(app, passport, handleError));
 
 app.use('/cms/', login.isLoggedIn); //can only access cms when logged in
 
+app.use('/cms/joinedraces', require('./routes/cms/joined_races')());
+
 app.use('/cms/races', require('./routes/cms/races')());
 
 app.use('/cms/users', users.isAdmin, require('./routes/cms/users')()); //can only access when admin

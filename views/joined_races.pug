@@ -1,0 +1,52 @@
+extends layout
+
+block content
+
+  .container
+        a.btn.btn-default.fas.fa-arrow-left(href='/')
+        h1 Joined Races
+
+        if successMessage.length > 0
+          .alert.alert-success.alert-dismissible(role='alert')
+            span.close(type='button', data-dismiss='alert', aria-label='Close')
+              span(aria-hidden='true') ×
+            | #{successMessage}  
+
+        if errorMessage.length > 0
+          .alert.alert-danger.alert-dismissible(role='alert')
+            span.close(type='button', data-dismiss='alert', aria-label='Close')
+              span(aria-hidden='true') ×
+            | #{errorMessage}
+        
+        button.btn.btn-success.fas.fa-plus(type='button', data-toggle='modal', data-target='#addRaceModal', data-whatever='@mdo')
+
+        table.table.table-striped
+          thead
+            tr
+              th(scope='col') Name
+              th(scope='col') Checkins
+          tbody
+              each race in races.racesParticipated
+                tr
+                  th(scope='row') #{race.raceId.Name}
+                  th(scope='row') #{race.checkins.length}
+                
+
+        .modal.fade(id='addRaceModal', tabindex='-1', role='dialog', aria-labelledby='addRaceModalLabel', aria-hidden='true')
+          .modal-dialog(role='document')
+            .modal-content
+              form(method='POST')
+                .modal-header
+                  h5#addRaceModalLabel.modal-title Participate
+                  button.close(type='button', data-dismiss='modal', aria-label='Close')
+                    span(aria-hidden='true') ×
+                .modal-body
+                    .form-group
+                      label.col-form-label(for='raceId') ID:  
+                      input#recipient-name.form-control(type='text', name="raceId", placeholder="ID")
+                    .form-group
+                      label.col-form-label(for='secret') Secret:
+                      input#recipient-name.form-control(type='text', name="secret", placeholder="Secret")
+                .modal-footer
+                  button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+                  button.btn.btn-primary(type='submit') Add 

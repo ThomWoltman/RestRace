@@ -1,5 +1,6 @@
 // load the things we need
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 var bcrypt   = require('bcrypt-nodejs');
 
 // define the schema for our user model
@@ -21,17 +22,25 @@ var userSchema = mongoose.Schema({
         displayName  : String,
         username     : String
     },
-    google           : {
-        id           : String,
-        token        : String,
-        email        : String,
-        name         : String
-    },
     role : {
         type : String,
         enum : ['admin', 'normal'],
         default: 'normal'
-    }
+    },
+    racesParticipated: [
+        {
+            raceId: {
+                type: Schema.Types.ObjectId, 
+                ref: "Race",
+                required: [true, "Race ID is required"]
+            },
+            checkins: [
+                {
+                    type: String,
+                }
+            ]
+        }
+    ]
 });
 
 // methods ======================
