@@ -33,6 +33,14 @@ function findPlacesByQuery(query){
         })
 }
 
+function getNextPagePlaces(pagetoken){
+    return superagent.get(placesUrl+'nearbysearch/json')
+        .query({
+            key: api_key,
+            pagetoken 
+        })
+}
+
 function addPlace(place) {
     const newPlace = {
         ...place,
@@ -47,4 +55,5 @@ module.exports = {
     addPlace,
     findSinglePlace,
     findPlacesByQuery,
+    getNextPagePlaces,
 }

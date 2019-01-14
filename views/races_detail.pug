@@ -3,6 +3,9 @@ extends layout
 block content
   
   .container
+        a.btn.btn-default.fas.fa-arrow-left(href='/cms/races/')
+        h1 #{race.Name}
+
         if successMessage.length > 0
           .alert.alert-success.alert-dismissible(role='alert')
             span.close(type='button', data-dismiss='alert', aria-label='Close')
@@ -32,53 +35,53 @@ block content
             
             button.btn.btn-primary(type='submit') Save changes
 
-            h5
-                b Owners:
+        h5
+            b Owners:
 
-            table.table.table-striped(name='Owners')
-                thead
+        table.table.table-striped(name='Owners')
+            thead
+                tr
+                th(scope='col') ID
+                th(scope='col') Email
+                th(scope='col') Facebook
+                th(scope='col') Role
+            tbody
+                each user in race.Owners
                     tr
-                    th(scope='col') ID
-                    th(scope='col') Email
-                    th(scope='col') Facebook
-                    th(scope='col') Role
-                tbody
-                    each user in race.Owners
-                        tr
-                            td #{user._id}
-                            if user.local
-                                td #{user.local.email}
-                            else if user.facebook
-                                td #{user.facebook.email}
-                            if user.facebook        
-                                td #{user.facebook.name}
-                            else
-                                td not connected
-                            td #{user.role}
+                        td #{user._id}
+                        if user.local
+                            td #{user.local.email}
+                        else if user.facebook
+                            td #{user.facebook.email}
+                        if user.facebook        
+                            td #{user.facebook.name}
+                        else
+                            td not connected
+                        td #{user.role}
 
-            h5
-                b Places:
+        h5
+            b Places:
 
-            table.table.table-striped(name='Places')
-                thead
+        table.table.table-striped(name='Places')
+            thead
+                tr
+                th(scope='col') ID
+                th(scope='col') Name
+                th(scope='col') Address
+                th(scope='col')
+            tbody
+                each place in race.Places
                     tr
-                    th(scope='col')
-                    th(scope='col') ID
-                    th(scope='col') Name
-                    th(scope='col') Address
-                tbody
-                    each place in race.Places
-                        tr
-                            td 
-                                input(type='checkbox', name="Places[]", value=place.place_id, checked)
-                            th(scope='row') #{place.place_id}
-                            td #{place.name}
-                            td #{place.vicinity}
-                            td
+                        th(scope='row') #{place.place_id}
+                        td #{place.name}
+                        td #{place.vicinity}
+                        td
+                            form(method='POST', action='/cms/races/'+race._id+'/places/'+place.place_id+'/delete')
+                                button.btn.btn-danger.far.fa-trash-alt(id='deletePlace', type='submit')
+        
+        
             
-            
-                
 
-            a.btn.btn-success.fas.fa-plus(href='/cms/races/'+race._id+'/places')
-            
+        a.btn.btn-success.fas.fa-plus(href='/cms/races/'+race._id+'/places')
+        
 

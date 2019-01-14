@@ -1,5 +1,5 @@
 const { Race } = require('../models/race');
-const { findSinglePlace } = require('../models/places');
+const { findSinglePlace } = require('../controllers/PlaceController');
 
 function findRaces(userId) {
     return Race.find({ Owners: userId});

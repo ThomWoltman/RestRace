@@ -3,6 +3,7 @@ extends layout
 block content
 
   .container
+        a.btn.btn-default.fas.fa-arrow-left(href='/cms/races/'+raceId)
         h1 Places
 
         form(method='GET', action='/cms/races/'+raceId+'/places')
@@ -23,6 +24,9 @@ block content
                   input.form-control(name='latitude', type='text', placeholder='Latitude')
                   input.form-control(name='radius', type='text', placeholder='Radius(m)')
                   button.btn.btn-default(type='submit') Search!    
+
+        if nextPageToken
+              a.btn.btn-default.fas.fa-arrow-right(href='/cms/races/'+raceId+'/places?nextPageToken='+nextPageToken)
 
         form(method='POST', action='/cms/races/'+raceId+'/places')
 
@@ -46,6 +50,6 @@ block content
                     else
                       | #{place.vicinity}
                   td
-
+            
           button.btn.btn-primary(type='submit') Add
         

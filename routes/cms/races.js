@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express();
 
-const { findPlaces, findPlacesByQuery } = require('../../controllers/PlaceController');
-const { findRaces, addRace, deleteRace, findSingleRaceByOwner, updateRace, addPlaces } = require('../../controllers/RaceController');
+const { findPlaces, findPlacesByQuery, getNextPagePlaces } = require('../../controllers/PlaceController');
+const { findRaces, addRace, deleteRace, findSingleRaceByOwner, updateRace, addPlaces, removePlace } = require('../../controllers/RaceController');
 
 router.get('/', (req, res, next) => {
 	const user = req.user;
@@ -57,6 +57,8 @@ router.get('/:id', (req, res, next) =>{
 })
 
 router.get('/:id/places', (req, res, next) =>{
+	let nextPageToken = req.query.nextPageToken;
+
 	let query = req.query.query;
 	let long = req.query.longitude;
 	let lat = req.query.latitude;
@@ -66,6 +68,7 @@ router.get('/:id/places', (req, res, next) =>{
 
 	if(query) search = findPlacesByQuery(query);
 	else if(long && lat && radius) search = findPlaces({ lat, long, radius }, { type: 'cafe'});
+	else if(nextPageToken) search = getNextPagePlaces(nextPageToken);
 
 	if(!search) res.render('places', { places: [], raceId : req.params.id });
 
@@ -74,7 +77,11 @@ router.get('/:id/places', (req, res, next) =>{
         .end((err, result) => {
 			if(err) { next(err); }
 			console.log(result.body);
-            res.render('places', { places : result.body.candidates || result.body.results, raceId : req.params.id } );
+            res.render('places', { 
+				places : result.body.candidates || result.body.results, 
+				raceId : req.params.id, 
+				nextPageToken: result.body.next_page_token 
+			});
         });
 	}
 })
@@ -96,6 +103,15 @@ router.post('/:id/places', (req, res, next) =>{
 	}
 })
 
+router.post('/:id/places/:place_id/delete', (req, res, next) =>{
+	removePlace(req.params.id, req.user._id, req.params.place_id)
+		.then(result => {
+			req.flash('raceSuccessMessage', 'Place verwijderd');
+			res.redirect('/cms/races/'+req.params.id);
+		})
+		.catch(err => next(err));
+})
+
 router.post('/:id/delete', (req, res, next) => {
 	deleteRace(req.params.id, req.user._id)
 		.then(result => {
@@ -108,16 +124,18 @@ router.post('/:id/delete', (req, res, next) => {
 })
 
 router.post('/:id/update', (req, res, next) => {
+	req.body.Started = req.body.Started || false;
+	
 	updateRace(req.body, req.user._id)
 		.then(result => {
 			console.log(result);
 			if(result.nModified > 0){
 				req.flash('raceSuccessMessage', 'Race aangepast!');
-				res.redirect('/cms/races');
+				res.redirect('/cms/races/'+req.params.id);
 			}
 			else {
 				req.flash('raceSuccessMessage', 'Race niet veranderd')
-				res.redirect('/cms/races/');
+				res.redirect('/cms/races/'+req.params.id);
 			}
 		})
 		.fail(err => {
