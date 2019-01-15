@@ -11,9 +11,10 @@ block content
             b #{user.local.email}
           else if user.facebook.email
             b #{user.facebook.email}
-        a.btn.btn-default(href='/cms/races')
-          span.fa.fa-beer
-          |  Races    
+        if(isAdmin)
+          a.btn.btn-default(href='/cms/races')
+            span.fa.fa-beer
+            |  Races    
         a.btn.btn-default(href='/cms/joinedraces')
           span.fas.fa-clipboard-list
           |  Participate      

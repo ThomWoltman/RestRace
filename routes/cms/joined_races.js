@@ -1,12 +1,10 @@
 var express = require('express');
 var router = express();
 
-const { addParticipant } = require('../../controllers/RaceController');
-const { getRaces } = require('../../controllers/UserController');
+const { addParticipant, getRacesAsParticipant } = require('../../controllers/RaceController');
 
 router.get('/', (req, res, next) => {
-    let checkins;
-    getRaces(req.user._id)
+    getRacesAsParticipant(req.user._id)
         .then(races => {
             let checkins = [];
             

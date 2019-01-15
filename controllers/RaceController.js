@@ -122,6 +122,18 @@ function startRace(raceId, userId){
     return Race.update({_id: raceId, Owners: userId}, { $set: { Started: true} });
 }
 
+function getRacesAsParticipant(userId){
+    return Race.find({ "Participants.user_id": userId }).lean();
+}
+
+function getRaceAsParticipant(userId, race_id){
+    return Race.findOne({ "Participants.user_id": userId, _id: race_id }).lean();
+}
+
+function addCheckin(raceId, placeId, userId){
+    return Race.update({ "Participants.user_id": userId, _id: raceId }, { $push: { "Participants.$.checkins": placeId } }, {runValidators:true})
+}
+
 module.exports = {
     findRaces,
     addRace,
@@ -135,5 +147,8 @@ module.exports = {
     getParticipants,
     addParticipant,
     startRace,
-    getPlaces
+    getPlaces,
+    getRacesAsParticipant,
+    getRaceAsParticipant,
+    addCheckin
 }

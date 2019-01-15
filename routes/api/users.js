@@ -4,8 +4,8 @@ var router = express();
 var handleError;
 
 const authenticate = require('../../middleware/authenticate');
-const { findUsers, findUser, deleteUser, addUser, getRole, updateUser, getRaces, getRace, addCheckin } = require('../../controllers/UserController');
-const { addParticipant, getPlaces } = require('../../controllers/RaceController');
+const { findUsers, findUser, deleteUser, addUser, getRole, updateUser } = require('../../controllers/UserController');
+const { addParticipant, getPlaces, getRaceAsParticipant, getRacesAsParticipant, addCheckin } = require('../../controllers/RaceController');
 
 router.route('/', authenticate.isAdmin)
     .get((req, res, next) => {
@@ -81,7 +81,7 @@ router.route('/:id', authenticate.isAdmin)
 
     router.route('/:id/racesparticipated')
     .get((req, res, next) => {
-        getRaces(req.user._id)
+        getRacesAsParticipant(req.user._id)
             .then(result => {
                 if(!result){
                     res.status(404);
@@ -111,7 +111,7 @@ router.route('/:id', authenticate.isAdmin)
 
     router.route('/:id/racesparticipated/:race_id')
     .get((req, res, next) => {
-        getRace(req.user._id, req.params.race_id)
+        getRaceAsParticipant(req.user._id, req.params.race_id)
             .then(result => {
                 if(!result){
                     res.status(404);
@@ -127,7 +127,7 @@ router.route('/:id', authenticate.isAdmin)
 
     router.route('/:id/racesparticipated/:race_id/places')
     .get((req, res, next) => {
-        getRace(req.user._id, req.params.race_id)
+        getRaceAsParticipant(req.user._id, req.params.race_id)
             .then(result => {
                 if(!result){
                     res.status(404);
@@ -147,7 +147,7 @@ router.route('/:id', authenticate.isAdmin)
 
     router.route('/:id/racesparticipated/:race_id/checkins')
     .get((req, res, next) => {
-        getRace(req.user._id, req.params.race_id)
+        getRaceAsParticipant(req.user._id, req.params.race_id)
             .then(result => {
                 let checkins = [];
                 result.Participants.forEach(Participant => {

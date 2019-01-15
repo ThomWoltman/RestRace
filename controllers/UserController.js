@@ -39,18 +39,6 @@ function addUser(email, password, role='normal') {
         .save()
 }
 
-function getRaces(userId){
-    return Race.find({ "Participants.user_id": userId }).lean();
-}
-
-function getRace(userId, race_id){
-    return Race.findOne({ "Participants.user_id": userId, _id: race_id }).lean();
-}
-
-function addCheckin(raceId, placeId, userId){
-    return Race.update({ "Participants.user_id": userId, _id: raceId }, { $push: { "Participants.$.checkins": placeId } }, {runValidators:true})
-}
-
 // create the model for users and expose it to our app
 module.exports = {
     findUsers,
@@ -59,7 +47,4 @@ module.exports = {
     addUser,
     getRole,
     updateUser,
-    getRaces,
-    getRace,
-    addCheckin
 }
