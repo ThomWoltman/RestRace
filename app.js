@@ -54,6 +54,7 @@ require('./config/passport.js')(passport); // pass passport for configuration
 //middleware
 var login = require('./middleware/login');
 var users = require('./middleware/role');
+var authenticate = require('./middleware/authenticate');
 
 function handleError(req, res, statusCode, message){
     console.log();
@@ -87,18 +88,24 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
+//account
 app.use('/', require('./routes/index')(app, passport, handleError));
+//account
 
+//cms
 app.use('/cms/', login.isLoggedIn); //can only access cms when logged in
 
 app.use('/cms/joinedraces', require('./routes/cms/joined_races')());
 
-app.use('/cms/races', require('./routes/cms/races')());
+app.use('/cms/races', users.isAdmin, require('./routes/cms/races')());
 
 app.use('/cms/users', users.isAdmin, require('./routes/cms/users')()); //can only access when admin
 
 app.use('/cms/places', users.isAdmin, require('./routes/cms/places')());
+//cms
 
+
+//api
 app.use('/api/', (req, res, next) => {
     passport.authenticate('basic', { session: false }, (err, user, info) => {
         if(err) { return next(err) }
@@ -109,29 +116,25 @@ app.use('/api/', (req, res, next) => {
         if(user) {
             req.login(user, next);
         }
-    })(req, res, next);  
+    })(req, res, next);
 });
 
-app.use('/api/races', require('./routes/api/races')(handleError));
-app.use('/api/places', require('./routes/api/places')(handleError));
+app.use('/api/races', authenticate.isAdmin, require('./routes/api/races')(handleError));
 
-app.use('/api/users', (req, res, next) => {
-    if(req.user.isAdmin()){
-        next();
-    }
-    else{
-        res.status(401);
-        res.json({ message: "Not authorized to access /api/users"});
-    }
-})
+app.use('/api/places', authenticate.isAdmin, require('./routes/api/places')(handleError));
 
 app.use('/api/users', require('./routes/api/users')(handleError));
+//api
 
+
+//api-docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/api-docs.json", (req, res) => {
     res.send(swaggerSpec);
 });
+//api-docs
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

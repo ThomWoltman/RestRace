@@ -34,14 +34,21 @@ const raceSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    Participants: {
-        type: [
+    Participants:
+        [
             {
-                type: Schema.Types.ObjectId, 
-                ref: "User",
+                user_id: {
+                    type: Schema.Types.ObjectId, 
+                    ref: "User",
+                    required: [true, "User ID is required"]
+                },
+                checkins: [
+                    {
+                        type: String,
+                    }
+                ]
             }
         ]
-    }  
 });
 
 raceSchema.methods.validSecret = function(secret) {

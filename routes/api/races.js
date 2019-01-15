@@ -138,6 +138,10 @@ router.route('/:id')
 	.get((req, res, next) => {
 		getParticipants(req.params.id, user._id)
 			.then(participants => {
+				if(!participants){
+					res.status(404);
+					res.json({ message: "resource not found" });
+				}
 				res.status(200);
 				res.json(participants);
 			})

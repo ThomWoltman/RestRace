@@ -1,4 +1,10 @@
 const { User } = require('../models/user');
+const { Race } = require('../models/race');
+
+let defaultRacePopulate = {
+    path: 'racesParticipated.raceId', 
+    select: 'Name Places _id'
+}
 
 function findUsers() {
     return User.find();
@@ -33,12 +39,16 @@ function addUser(email, password, role='normal') {
         .save()
 }
 
-function addRace(raceId, userId){
-    return User.update({ _id: userId }, { $push: { racesParticipated: { raceId }}});
+function getRaces(userId){
+    return Race.find({ "Participants.user_id": userId }).lean();
 }
 
-function getRaces(userId){
-    return User.findOne({ _id: userId }, 'racesParticipated').populate('racesParticipated.raceId');
+function getRace(userId, race_id){
+    return Race.findOne({ "Participants.user_id": userId, _id: race_id }).lean();
+}
+
+function addCheckin(raceId, placeId, userId){
+    return Race.update({ "Participants.user_id": userId, _id: raceId }, { $push: { "Participants.$.checkins": placeId } }, {runValidators:true})
 }
 
 // create the model for users and expose it to our app
@@ -49,6 +59,7 @@ module.exports = {
     addUser,
     getRole,
     updateUser,
-    addRace,
     getRaces,
+    getRace,
+    addCheckin
 }

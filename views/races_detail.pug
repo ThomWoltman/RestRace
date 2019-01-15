@@ -70,8 +70,8 @@ block content
             tbody
                 each participant in race.Participants
                     tr
-                        td #{participant._id}   
-                        td 0           
+                        td #{participant.user_id}   
+                        td #{participant.checkins.length}           
 
         h5
             b Places:

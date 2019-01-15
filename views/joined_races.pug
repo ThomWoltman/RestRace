@@ -26,10 +26,10 @@ block content
               th(scope='col') Name
               th(scope='col') Checkins
           tbody
-              each race in races.racesParticipated
+              each race in races
                 tr
-                  th(scope='row') #{race.raceId.Name}
-                  th(scope='row') #{race.checkins.length}
+                  th(scope='row') #{race.Name}
+                  th(scope='row') #{checkins[race._id]}
                 
 
         .modal.fade(id='addRaceModal', tabindex='-1', role='dialog', aria-labelledby='addRaceModalLabel', aria-hidden='true')

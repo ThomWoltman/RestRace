@@ -53,7 +53,7 @@ function removePlace(raceId, userId, placeId) {
 
 function findSingleRaceByOwner(raceId, userId) {
     return new Promise((resolve, reject) => {
-        Race.findOne({ _id: raceId, Owners: userId}).populate('Owners').populate('Participants').lean().exec(function(err, race) {
+        Race.findOne({ _id: raceId, Owners: userId}).populate('Owners').lean().exec(function(err, race) {
             if(err) {
                 reject(err);
             }    
@@ -115,7 +115,7 @@ function getParticipants(raceId, userId) {
 }
 
 function addParticipant(raceId, userId, secret){
-    return Race.update({_id: raceId, Secret: secret}, { $push: { Participants: userId }});
+    return Race.update({_id: raceId, Secret: secret}, { $push: { Participants: { user_id: userId } }});
 }
 
 function startRace(raceId, userId){
@@ -134,5 +134,6 @@ module.exports = {
     removePlace,
     getParticipants,
     addParticipant,
-    startRace
+    startRace,
+    getPlaces
 }

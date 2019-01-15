@@ -27,20 +27,6 @@ var userSchema = mongoose.Schema({
         enum : ['admin', 'normal'],
         default: 'normal'
     },
-    racesParticipated: [
-        {
-            raceId: {
-                type: Schema.Types.ObjectId, 
-                ref: "Race",
-                required: [true, "Race ID is required"]
-            },
-            checkins: [
-                {
-                    type: String,
-                }
-            ]
-        }
-    ]
 });
 
 // methods ======================
