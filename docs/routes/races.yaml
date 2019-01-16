@@ -9,6 +9,19 @@ tags:
     description: Get list of all races
     produces:
       - application/json
+    parameters:
+        - name: Name
+          in: query
+          description: Search by name
+          type: string
+        - name: Secret
+          in: query
+          description: Search by secret
+          type: string
+        - name: Fields
+          in: query
+          description:  One or more fields, specifying the types of race data to return, separated by a space.
+          type: string
     responses:
       200:
         description: "List of races"

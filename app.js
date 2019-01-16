@@ -46,7 +46,7 @@ var flash = require("connect-flash");
 var session = require("express-session");
 
 var configDB = require('./config/database.js');
-mongoose.connect(configDB.url, { useMongoClient: true } );
+mongoose.connect(configDB.url, { useNewUrlParser: true } );
 mongoose.Promise = require('q').Promise;
 
 require('./config/passport.js')(passport); // pass passport for configuration
@@ -123,7 +123,9 @@ app.use('/api/races', authenticate.isAdmin, require('./routes/api/races')(handle
 
 app.use('/api/places', authenticate.isAdmin, require('./routes/api/places')(handleError));
 
-app.use('/api/users', require('./routes/api/users')(handleError));
+app.use('/api/users', authenticate.isAdmin, require('./routes/api/users')(handleError));
+
+app.use('/api/racesparticipated', require('./routes/api/races_participated')(handleError));
 //api
 
 

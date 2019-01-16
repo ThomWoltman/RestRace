@@ -8,6 +8,8 @@ var app = require('express')();
 var index = require('../app.js');
 app.use('*', index);
 
+let { Race } = require('../models/race');
+
 function makeRequest(route, statusCode, done){
 	request(app)
 		.get(route)
@@ -27,7 +29,7 @@ describe('API', function(){
 				makeRequest('/api/races/', 302, function(err , res) {
 					if(err => done(err));
 
-					expect(true).to.equal(res.body);
+					expect(true).to.equal(true);
 					done();
 				});
 			});
@@ -48,4 +50,36 @@ describe('API', function(){
 		})
 	})	
 });
+
+describe('Models', function() {
+	describe('Race', function(){
+		it('Secret should be required', function(done){
+			let race = new Race();
+			race.Name = "bla";
+	
+			race.save(function(err) {
+				if(err){
+					expect(err.name).to.equal('ValidationError');
+					expect(err.errors.Secret.path).to.equal('Secret');
+					expect(err.errors.Secret.message).to.equal('Secret is required');
+					done();
+				}
+			})
+		})
+		it('Name should be required', function(done){
+			let race = new Race();
+			race.Secret = "bla";
+	
+			race.save(function(err) {
+				if(err){
+					
+					expect(err.name).to.equal('ValidationError');
+					expect(err.errors.Name.path).to.equal('Name');
+					expect(err.errors.Name.message).to.equal('Name is required');
+					done();
+				}
+			})
+		})
+	})
+})
 

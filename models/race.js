@@ -27,8 +27,12 @@ const raceSchema = mongoose.Schema({
         type: [
             {
                 type: String,
-                maxlength: [27, "Geen valide Place ID"],
-                minlength: [27, "Geen valide Place ID"],
+                validate: {
+                    validator: function(id) {
+                      return id.length === 27;
+                    },
+                    message: props => `${props.value} is not a valid place id!`
+                  }
             }
         ]
     },

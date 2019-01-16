@@ -16,7 +16,11 @@ router.all('*', (req, res, next) => {
 // Routing
 router.route('/')
 	.get((req, res, next) => {
-		findRaces(user._id)
+		let params = {};
+		if(req.query.Name) params.Name = req.query.Name;
+		if(req.query.Secret) params.Secret = req.query.Secret;
+
+		findRaces(user._id, params, req.query.Fields)
 			.then(races => {
 				res.status(200);
 				res.json(races);

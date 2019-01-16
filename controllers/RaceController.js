@@ -1,8 +1,8 @@
 const { Race } = require('../models/race');
 const { findSinglePlace } = require('../controllers/PlaceController');
 
-function findRaces(userId) {
-    return Race.find({ Owners: userId});
+function findRaces(userId, params, fields) {
+    return Race.find({ Owners: userId, ...params}, fields);
 }
 
 function addRace(race, userId) {
