@@ -145,7 +145,7 @@ app.use(function(req, res, next) {
 
 // error handlers
 app.use('/api', (err, req, res, next) => {
-    res.status(500);
+    res.status(400);
     res.json({
         name: err.name,
         message: err.message,

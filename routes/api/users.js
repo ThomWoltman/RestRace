@@ -97,13 +97,13 @@ router.route('/:id', authenticate.isAdmin)
     .post((req, res, next) => {
         addParticipant(req.body.raceId, req.user._id, req.body.secret)
             .then(result => {
-                if(!result) {
-                    res.status(404);
-                    res.send({ message: "race id or secret is wrong"});
-                }
-                else{
+                if(result.n > 0) {
                     res.status(201);
                     res.json(result);
+                }
+                else{
+                    res.status(400);
+                    res.send({ message: "bad request"});
                 }
             })
             .fail(err => next(err));
@@ -155,8 +155,12 @@ router.route('/:id', authenticate.isAdmin)
                         checkins = Participant.checkins;
                     }
                 });
-                res.status(200);
-                res.json(checkins);
+                getPlaces(checkins)
+                    .then(result => {
+                        res.status(200);
+                        res.json(result);
+                    })
+                    .catch(err => next(err));
             })
             .fail(err => next(err));
     })
@@ -168,8 +172,18 @@ router.route('/:id', authenticate.isAdmin)
                     res.json({ message: "not found"});
                 }
                 else{
-                    res.status(200);
-                    res.json(result);
+                    if(result.nModified > 0){
+                        res.status(200);
+                        res.json(result);
+                    }
+                    else if(result.n > 0){
+                        res.status(400);
+                        res.json({message: "Er is al ingecheckt op deze locatie"});
+                    }
+                    else{
+                        res.status(400);
+                        res.json({message: "Place bestaat niet"});
+                    }
                 }
             })
             .fail(err => next(err));

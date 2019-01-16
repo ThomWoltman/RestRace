@@ -90,7 +90,12 @@ router.post('/:id/places', (req, res, next) =>{
 	if(req.body.places){
 		addPlaces(req.body.places, req.params.id, req.user._id)
 		.then(result => {
-			req.flash('raceSuccessMessage', 'Race geüpdate!');
+			if(result.nModified > 0){
+				req.flash('raceSuccessMessage', 'Race geüpdate!');
+			} else {
+				req.flash('raceSuccessMessage', 'Race niet aangepast!');
+			}
+			
 			res.redirect('/cms/races/'+req.params.id);
 		})
 		.fail(err => {

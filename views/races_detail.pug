@@ -69,8 +69,11 @@ block content
                 th(scope='col') checkins
             tbody
                 each participant in race.Participants
-                    tr
-                        td #{participant.user_id}   
+                    tr 
+                        if participant.user_id.local
+                            td #{participant.user_id.local.email}  
+                        else if participant.user_id.facebook.email
+                            td #{participant.user_id.facebook.email}
                         td #{participant.checkins.length}           
 
         h5

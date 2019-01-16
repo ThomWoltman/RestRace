@@ -20,10 +20,12 @@ block content
               | : #{user._id}
               br
               strong email
-              | : #{user.local.email}
+              if user.local
+                | : #{user.local.email}
               br
               strong password
-              | : #{user.local.password}
+              if user.local
+                | : #{user.local.password}
 
         .col-sm-6
             .well

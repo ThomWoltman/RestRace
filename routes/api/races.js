@@ -87,8 +87,14 @@ router.route('/:id')
 	.post((req, res, next) => {
 		addPlaces(req.body, req.params.id, user._id)
 			.then(result => {
-				res.status(200);
-				res.json(result);
+				if(result.nModified >= 1) {
+					res.status(200);
+					res.json(result);
+				}
+				else{
+					res.status(400);
+					res.json({ message: "Place is al toegevoegd"});
+				}
 			})
 			.fail(err => next(err));
 	})
@@ -151,17 +157,13 @@ router.route('/:id')
 	.post((req, res, next) => {
 		addParticipant(req.params.id, user._id, req.body.secret)
 			.then(result => {
-				if(!result) {
-					res.status(404);
-					res.json( { message: 'Wrong race ID' });
-				}
 				if(result.n > 0){
 					res.status(200);
 					res.json(result);
 				}
 				else{
-					res.status(401);
-					res.json({ message: 'Wrong secret' });
+					res.status(400);
+					res.json({ message: 'Bad request' });
 				}
 			})
 			.fail(err => next(err));

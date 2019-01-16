@@ -26,7 +26,9 @@ const raceSchema = mongoose.Schema({
     Places: {
         type: [
             {
-                type: String
+                type: String,
+                maxlength: [27, "Geen valide Place ID"],
+                minlength: [27, "Geen valide Place ID"],
             }
         ]
     },
@@ -40,7 +42,6 @@ const raceSchema = mongoose.Schema({
                 user_id: {
                     type: Schema.Types.ObjectId, 
                     ref: "User",
-                    required: [true, "User ID is required"]
                 },
                 checkins: [
                     {
