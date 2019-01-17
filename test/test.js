@@ -9,6 +9,7 @@ var index = require('../app.js');
 app.use('*', index);
 
 let { Race } = require('../models/race');
+const { addRace } = require('../controllers/RaceController');
 
 function makeRequest(route, statusCode, done){
 	request(app)

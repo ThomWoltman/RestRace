@@ -22,6 +22,10 @@ router.route('/')
 
 		findRaces(user._id, params, req.query.Fields)
 			.then(races => {
+				if(!races){
+					res.status(404);
+					res.json({ message: "resource not found" });
+				}
 				res.status(200);
 				res.json(races);
 			})
@@ -41,8 +45,12 @@ router.route('/:id')
 	.get((req, res, next) => {
 		findSingleRace(req.params.id)
 			.then(result => {
-					res.status(200);
-					res.json(result);
+				if(!result){
+					res.status(404);
+					res.json({ message: "resource not found" });
+				}
+				res.status(200);
+				res.json(result);
 			})
 			.fail(err => next(err))
 	})
