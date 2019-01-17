@@ -113,7 +113,7 @@ const { addParticipant, getPlaces, getRaceAsParticipant, getRacesAsParticipant, 
 
 // Export
 module.exports = function (errCallback){
-	console.log('Initializing users routing module');
+	console.log('Initializing placesparticipated routing module');
 	
 	handleError = errCallback;
 	return router;
